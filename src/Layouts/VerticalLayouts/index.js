@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
-import RightSidebar from '../../Components/Common/RightSidebar';
+import RightSidebar from '../../components/common/RightSidebar';
 
 //import actions
 import {

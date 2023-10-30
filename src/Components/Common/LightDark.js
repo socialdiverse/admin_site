@@ -1,7 +1,7 @@
 import React from 'react';
 
 //constants
-import { layoutModeTypes } from "../../Components/constants/layout";
+import { layoutModeTypes } from "../../components/constants/layout";
 
 const LightDark = ({ layoutMode, onChangeLayoutMode }) => {
 

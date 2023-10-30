@@ -1,7 +1,7 @@
 import React from 'react';
 import MetaTags from "react-meta-tags";
 import { Card, CardBody, CardHeader, Col, Container, Row } from 'reactstrap';
-import BreadCrumb from '../../../Components/Common/BreadCrumb';
+import BreadCrumb from '../../../components/common/BreadCrumb';
 
 // Import Table Data
 import { BaseExample, CardTableExample, PaginationExample, SearchExample, SortingExample, LoadingStateExample, FixedHeaderExample, HiddenColumnsExample } from './GridTablesData';

@@ -1,38 +1,44 @@
-import React from 'react';
-
-//import Scss
-import './assets/scss/themes.scss';
-
-//imoprt Route
-import Route from './Routes';
-
-// Import Firebase Configuration file
-// import { initFirebaseBackend } from "./helpers/firebase_helper";
-
-// Fake Backend 
-import fakeBackend from "./helpers/AuthType/fakeBackend";
-
-// Activating fake backend
-fakeBackend();
-
-// const firebaseConfig = {
-//   apiKey: process.env.REACT_APP_API_KEY,
-//   authDomain: process.env.REACT_APP_AUTHDOMAIN,
-//   databaseURL: process.env.REACT_APP_DATABASEURL,
-//   projectId: process.env.REACT_APP_PROJECTID,
-//   storageBucket: process.env.REACT_APP_STORAGEBUCKET,
-//   messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
-//   appId: process.env.REACT_APP_APPID,
-//   measurementId: process.env.REACT_APP_MEASUREMENTID,
-// };
-
-// init firebase backend
-// initFirebaseBackend(firebaseConfig);
-
+import React, { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import Route from "./routes";
+import Spinner from "./components/common/Spinner";
+import { spinnerAtom } from "./Recoil/states/spinner";
+import { currentUserAtom } from "./Recoil/states/users";
+import "./assets/scss/themes.scss";
+import "./App.css";
+import { GetAll } from "./services/notification.service";
+import { notificationAtom } from "./Recoil/states/notification";
+import "react-toastify/dist/ReactToastify.css";
+import { GetCurrentUser } from "./services/user.service";
 function App() {
+  const [_, setSpinner] = useRecoilState(spinnerAtom);
+  const [user, setCurrentUser] = useRecoilState(currentUserAtom);
+  const [notifications, setNotifications] = useRecoilState(notificationAtom);
+  const spinner = useRecoilValue(spinnerAtom);
+
+  useEffect(() => {
+    // const getUsers = async () => {
+    //     try {
+    //         const user = await GetCurrentUser();
+    //         GetAll({ user_id: user.id })
+    //             .then((res) => {
+    //                 setNotifications(res);
+    //             })
+    //             .catch(() => {});
+    //         setCurrentUser(user);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    setSpinner(false);
+    // };
+    // getUsers();
+    return () => {};
+  }, [setCurrentUser, setSpinner, setNotifications]);
+
   return (
     <React.Fragment>
-      <Route />
+      <Spinner />
+      {!spinner && <Route />}
     </React.Fragment>
   );
 }

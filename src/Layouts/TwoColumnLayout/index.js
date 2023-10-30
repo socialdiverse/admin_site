@@ -3,8 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import PropTypes from "prop-types";
 import { Collapse, Container } from 'reactstrap';
 import logoSm from "../../assets/images/logo-sm.png";
-//i18n
-import { withTranslation } from "react-i18next";
 
 // Import Data
 import navdata from "../VerticalLayouts/LayoutMenuData";
@@ -160,7 +158,7 @@ const TwoColumnLayout = (props) => {
                                                                     to={subItem.link ? subItem.link : "/#"}
                                                                     className="nav-link"
                                                                 >
-                                                                    {props.t(subItem.label)}
+                                                                    {(subItem.label)}
                                                                 </Link>
                                                             </li>
                                                         ) : (
@@ -170,7 +168,7 @@ const TwoColumnLayout = (props) => {
                                                                     className="nav-link"
                                                                     to="/#"
                                                                     data-bs-toggle="collapse"
-                                                                > {props.t(subItem.label)}
+                                                                > {(subItem.label)}
                                                                 </Link>
                                                                 <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id={item.id}>
                                                                     <ul className="nav nav-sm flex-column">
@@ -181,7 +179,7 @@ const TwoColumnLayout = (props) => {
                                                                                     <Link
                                                                                         to={childItem.link ? childItem.link : "/#"}
                                                                                         className="nav-link">
-                                                                                        {props.t(childItem.label)}
+                                                                                        {(childItem.label)}
                                                                                     </Link>
                                                                                 </li>
                                                                             ))
@@ -214,4 +212,4 @@ TwoColumnLayout.propTypes = {
 };
 
 
-export default withRouter(withTranslation()(TwoColumnLayout));
+export default withRouter(TwoColumnLayout);

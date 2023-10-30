@@ -5,8 +5,6 @@ import { Collapse } from 'reactstrap';
 
 // Import Data
 import navdata from "./LayoutMenuData";
-//i18n
-import { withTranslation } from "react-i18next";
 
 const SidebarContent = (props) => {
     const navData = navdata().props.children;
@@ -82,7 +80,7 @@ const SidebarContent = (props) => {
                     <React.Fragment key={key}>
                         {/* Main Header */}
                         {item['isHeader'] ?
-                            <li className="menu-title"><span data-key="t-menu">{props.t(item.label)}</span></li>
+                            <li className="menu-title"><span data-key="t-menu">{(item.label)}</span></li>
                             : (
                                 (item.subItems ? (
                                     <li className="nav-item">
@@ -92,7 +90,7 @@ const SidebarContent = (props) => {
                                             to={item.link ? item.link : "/#"}
                                             data-bs-toggle="collapse"
                                         >
-                                            <i className={item.icon}></i> <span data-key="t-apps">{props.t(item.label)}</span>
+                                            <i className={item.icon}></i> <span data-key="t-apps">{(item.label)}</span>
                                         </Link>
                                         <Collapse
                                             className="menu-dropdown"
@@ -108,7 +106,7 @@ const SidebarContent = (props) => {
                                                                     to={subItem.link ? subItem.link : "/#"}
                                                                     className="nav-link"
                                                                 >
-                                                                    {props.t(subItem.label)}
+                                                                    {(subItem.label)}
                                                                 </Link>
                                                             </li>
                                                         ) : (
@@ -118,7 +116,7 @@ const SidebarContent = (props) => {
                                                                     className="nav-link"
                                                                     to="/#"
                                                                     data-bs-toggle="collapse"
-                                                                > {props.t(subItem.label)}
+                                                                > {(subItem.label)}
                                                                 </Link>
                                                                 <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id="sidebarEcommerce">
                                                                     <ul className="nav nav-sm flex-column">
@@ -129,7 +127,7 @@ const SidebarContent = (props) => {
                                                                                     <Link
                                                                                         to={childItem.link ? childItem.link : "/#"}
                                                                                         className="nav-link">
-                                                                                        {props.t(childItem.label)}
+                                                                                        {(childItem.label)}
                                                                                     </Link>
                                                                                 </li>
                                                                             ))
@@ -150,7 +148,7 @@ const SidebarContent = (props) => {
                                         <Link
                                             className="nav-link menu-link"
                                             to={item.link ? item.link : "/#"}>
-                                            <i className={item.icon}></i> <span>{props.t(item.label)}</span>
+                                            <i className={item.icon}></i> <span>{(item.label)}</span>
                                         </Link>
                                     </li>
                                 ))
@@ -168,4 +166,4 @@ SidebarContent.propTypes = {
     t: PropTypes.any,
 };
 
-export default withRouter(withTranslation()(SidebarContent));
+export default withRouter(SidebarContent);

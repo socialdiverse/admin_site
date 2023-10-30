@@ -8,14 +8,13 @@ import logoDark from "../../assets/images/logo-dark.png";
 import logoLight from "../../assets/images/logo-light.png";
 
 //import Components
-import SearchOption from '../../Components/Common/SearchOption';
-import LanguageDropdown from '../../Components/Common/LanguageDropdown';
-import WebAppsDropdown from '../../Components/Common/WebAppsDropdown';
-import MyCartDropdown from '../../Components/Common/MyCartDropdown';
-import FullScreenDropdown from '../../Components/Common/FullScreenDropdown';
-import NotificationDropdown from '../../Components/Common/NotificationDropdown';
-import ProfileDropdown from '../../Components/Common/ProfileDropdown';
-import LightDark from '../../Components/Common/LightDark';
+import SearchOption from '../../components/common/SearchOption';
+import WebAppsDropdown from '../../components/common/WebAppsDropdown';
+import MyCartDropdown from '../../components/common/MyCartDropdown';
+import FullScreenDropdown from '../../components/common/FullScreenDropdown';
+import NotificationDropdown from '../../components/common/NotificationDropdown';
+import ProfileDropdown from '../../components/common/ProfileDropdown';
+import LightDark from '../../components/common/LightDark';
 
 const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
     const [search, setSearch] = useState(false);
@@ -115,9 +114,6 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
                                     </Form>
                                 </DropdownMenu>
                             </Dropdown>
-
-                            {/* LanguageDropdown */}
-                            <LanguageDropdown />
 
                             {/* WebAppsDropdown */}
                             <WebAppsDropdown />

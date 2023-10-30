@@ -1,9 +1,8 @@
 import React from 'react'
 import { Card, CardBody, Col, Container, Input, Label, Row, Table } from 'reactstrap';
 import MetaTags from "react-meta-tags";
-import BreadCrumb from '../../../Components/Common/BreadCrumb';
-import PreviewCardHeader from '../../../Components/Common/PreviewCardHeader';
-import UiContent from "../../../Components/Common/UiContent";
+import BreadCrumb from '../../../components/common/BreadCrumb';
+import PreviewCardHeader from '../../../components/common/PreviewCardHeader';
 import { Link } from 'react-router-dom';        
 import {DefaultTables,
         StrippedRow,
@@ -36,7 +35,6 @@ import avtarImage6 from '../../../assets/images/users/avatar-6.jpg';
 const BasicTables = () => {
   return (
     <React.Fragment>
-        <UiContent />
         <div className="page-content">
         <MetaTags>
             <title>Basic Tables | Velzon - React Admin & Dashboard Template</title>

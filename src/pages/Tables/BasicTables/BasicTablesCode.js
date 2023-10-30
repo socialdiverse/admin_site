@@ -1,5 +1,5 @@
 import React from 'react'
-import PrismCode from '../../../Components/Common/Prism';
+import PrismCode from '../../../components/common/Prism';
 
 //DefaultTables code
 const DefaultTables = () => {

@@ -7,8 +7,8 @@ import {
   CHANGE_TOPBAR_THEME,
   CHANGE_SIDEBAR_SIZE_TYPE,
   CHANGE_SIDEBAR_VIEW,
-  RESET_VALUE
-} from './actionType';
+  RESET_VALUE,
+} from "./actionType";
 
 //constants
 import {
@@ -19,8 +19,8 @@ import {
   layoutPositionTypes,
   topbarThemeTypes,
   leftsidbarSizeTypes,
-  leftSidebarViewTypes
-} from "../../Components/constants/layout";
+  leftSidebarViewTypes,
+} from "../../components/constants/layout";
 
 const INIT_STATE = {
   layoutType: layoutTypes.VERTICAL,
@@ -83,8 +83,7 @@ const Layout = (state = INIT_STATE, action) => {
         leftSidebarViewType: action.payload,
       };
 
-
-      case RESET_VALUE:
+    case RESET_VALUE:
       return {
         ...state,
         resetValue: INIT_STATE,
