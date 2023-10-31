@@ -1,20 +1,13 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
- 
-//Tables
-import BasicTables from "../pages/Tables/BasicTables/BasicTables";
-import GridTables from "../pages/Tables/GridTables/GridTables"; 
- 
-
-//login
-import Login from "../pages/Authentication/Login";
-import ForgetPasswordPage from "../pages/Authentication/ForgetPassword";
-
-const authProtectedRoutes = [ 
    
-  //Tables
-  { path: "/users", component: BasicTables },
-  { path: "/tables-gridjs", component: GridTables }, 
+//login
+import Login from "../pages/auth/Login";
+import ForgetPasswordPage from "../pages/auth/ForgetPassword";
+import UserPage from "../pages/user";
+
+const authProtectedRoutes = [  
+  { path: "/users", component: UserPage }, 
   {
     path: "/",
     exact: true,

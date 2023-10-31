@@ -20,14 +20,12 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 import logoLight from "../../assets/images/logo-light.png";
-import { useRecoilState } from "recoil";
-import { currentUserAtom } from "../../Recoil/states/users";
 import { Login as OnLogin } from "../../services/auth.service";
 import { useHistory } from "react-router-dom";
+import { CURRENT_USER } from "../../helpers/constants/global.variable";
 
 const Login = (props) => {
   const history = useHistory();
-  const [user, setCurrentUser] = useRecoilState(currentUserAtom);
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -42,7 +40,7 @@ const Login = (props) => {
     onSubmit: (values) => {
       OnLogin(values).then((res) => {
         if (res) {
-          setCurrentUser(res.user);
+          localStorage.setItem(CURRENT_USER, JSON.stringify(res.user));
           history.push("/users");
         }
       });

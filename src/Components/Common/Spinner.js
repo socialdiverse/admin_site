@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Spinner } from "reactstrap"; 
 import { useRecoilValue } from "recoil";
-import { spinnerAtom } from "../../Recoil/states/spinner";
+import { spinnerAtom } from "../../recoil/spinner";
 const Component = () => {
   let spinner = useRecoilValue(spinnerAtom);
   return (
