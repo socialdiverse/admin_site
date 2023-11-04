@@ -71,6 +71,26 @@ const Navdata = () => {
       },
     },
     {
+      id: "groups",
+      label: "Quản lý nhóm",
+      icon: "ri-honour-line",
+      link: "/groups",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("Groups");
+      },
+    },
+    {
+      id: "roles",
+      label: "Quản lý phân quyền",
+      icon: "ri-honour-line",
+      link: "/roles",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("Roles");
+      },
+    },
+    {
       id: "advanceUi",
       label: "Advance UI",
       icon: "ri-stack-line",

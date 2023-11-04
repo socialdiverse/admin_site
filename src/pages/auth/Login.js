@@ -51,9 +51,7 @@ const Login = (props) => {
     <React.Fragment>
       <div className="auth-page-content">
         <MetaTags>
-          <title>
-            Basic SignIn | Velzon - React Admin & Dashboard Template
-          </title>
+          <title>Social Diverse | Admin</title>
         </MetaTags>
         <Container>
           <Row>

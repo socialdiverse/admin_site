@@ -43,9 +43,7 @@ const ForgetPasswordPage = (props) => {
   return (
     <div className="auth-page-content">
       <MetaTags>
-        <title>
-          Reset Password | Velzon - React Admin & Dashboard Template
-        </title>
+        <title>Social Diverse | Admin</title>
       </MetaTags>
       <Container>
         <Row>

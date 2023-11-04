@@ -2,8 +2,8 @@ import React from 'react';
 import { Switch, Route } from "react-router-dom";
 
 //Layouts
-import NonAuthLayout from "../Layouts/NonAuthLayout";
-import VerticalLayout from "../Layouts/VerticalLayouts";
+import NonAuthLayout from "../layout/NonAuthLayout";
+import VerticalLayout from "../layout/VerticalLayouts";
 //routes
 import { authProtectedRoutes, publicRoutes } from "./allRoutes";
 import { AuthProtected, AccessRoute } from './AuthProtected';
