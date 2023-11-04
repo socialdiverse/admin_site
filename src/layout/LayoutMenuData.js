@@ -3,19 +3,7 @@ import { useHistory } from "react-router-dom";
 
 const Navdata = () => {
   const history = useHistory();
-  //state data
-  const [isDashboard, setIsDashboard] = useState(false);
-  const [isApps, setIsApps] = useState(false);
-  const [isAuth, setIsAuth] = useState(false);
-  const [isPages, setIsPages] = useState(false);
-  const [isBaseUi, setIsBaseUi] = useState(false);
   const [isAdvanceUi, setIsAdvanceUi] = useState(false);
-  const [isForms, setIsForms] = useState(false);
-  const [isTables, setIsTables] = useState(false);
-  const [isCharts, setIsCharts] = useState(false);
-  const [isIcons, setIsIcons] = useState(false);
-  const [isMaps, setIsMaps] = useState(false);
-  const [isMultiLevel, setIsMultiLevel] = useState(false);
 
   const [iscurrentState, setIscurrentState] = useState("Dashboard");
 
@@ -34,26 +22,10 @@ const Navdata = () => {
   }
 
   useEffect(() => {
-    // document.body.classList.remove("twocolumn-panel");
     if (iscurrentState === "Users") {
       history.push("/users");
     }
-  }, [
-    history,
-    iscurrentState,
-    isDashboard,
-    isApps,
-    isAuth,
-    isPages,
-    isBaseUi,
-    isAdvanceUi,
-    isForms,
-    isTables,
-    isCharts,
-    isIcons,
-    isMaps,
-    isMultiLevel,
-  ]);
+  }, [history, iscurrentState, isAdvanceUi]);
 
   const menuItems = [
     {
@@ -68,6 +40,16 @@ const Navdata = () => {
       click: function (e) {
         e.preventDefault();
         setIscurrentState("Users");
+      },
+    },
+    {
+      id: "posts",
+      label: "Quản lý bài viết",
+      icon: "ri-honour-line",
+      link: "/posts",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("Posts");
       },
     },
     {

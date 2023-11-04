@@ -2,18 +2,15 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 //import logo
-import logoSm from "../../assets/images/logo-sm.png";
-import logoDark from "../../assets/images/logo-dark.png";
-import logoLight from "../../assets/images/logo-light.png";
+import logoSm from "../assets/images/logo-sm.png";
+import logoDark from "../assets/images/logo-dark.png";
+import logoLight from "../assets/images/logo-light.png";
 
 //Import Components
 import SidebarContent from "./SidebarContent";
-import TwoColumnLayout from "../TwoColumnLayout";
 import { Container } from "reactstrap";
-import HorizontalLayout from "../HorizontalLayout";
 
 const Sidebar = ({ layoutType }) => {
-
   useEffect(() => {
     var verticalOverlay = document.getElementsByClassName("vertical-overlay");
     if (verticalOverlay) {
@@ -24,13 +21,20 @@ const Sidebar = ({ layoutType }) => {
   });
 
   const addEventListenerOnSmHoverMenu = () => {
-    // add listener Sidebar Hover icon on change layout from setting
-    if (document.documentElement.getAttribute('data-sidebar-size') === 'sm-hover') {
-      document.documentElement.setAttribute('data-sidebar-size', 'sm-hover-active');
-    } else if (document.documentElement.getAttribute('data-sidebar-size') === 'sm-hover-active') {
-      document.documentElement.setAttribute('data-sidebar-size', 'sm-hover');
+    if (
+      document.documentElement.getAttribute("data-sidebar-size") === "sm-hover"
+    ) {
+      document.documentElement.setAttribute(
+        "data-sidebar-size",
+        "sm-hover-active"
+      );
+    } else if (
+      document.documentElement.getAttribute("data-sidebar-size") ===
+      "sm-hover-active"
+    ) {
+      document.documentElement.setAttribute("data-sidebar-size", "sm-hover");
     } else {
-      document.documentElement.setAttribute('data-sidebar-size', 'sm-hover');
+      document.documentElement.setAttribute("data-sidebar-size", "sm-hover");
     }
   };
 
@@ -64,27 +68,14 @@ const Sidebar = ({ layoutType }) => {
             <i className="ri-record-circle-line"></i>
           </button>
         </div>
-        {layoutType === "horizontal" ? (
-          <div id="scrollbar">
-            <Container fluid>
-              <div id="two-column-menu"></div>
-              <ul className="navbar-nav" id="navbar-nav">
-                <HorizontalLayout />
-              </ul>
-            </Container>
-          </div>
-        ) : layoutType === 'twocolumn' ? (
-          <TwoColumnLayout />
-        ) : (
-          <SimpleBar id="scrollbar" className="h-100">
-            <Container fluid>
-              <div id="two-column-menu"></div>
-              <ul className="navbar-nav" id="navbar-nav">
-                <SidebarContent layoutType={layoutType} />
-              </ul>
-            </Container>
-          </SimpleBar>
-        )}
+        <SimpleBar id="scrollbar" className="h-100">
+          <Container fluid>
+            <div id="two-column-menu"></div>
+            <ul className="navbar-nav" id="navbar-nav">
+              <SidebarContent layoutType={layoutType} />
+            </ul>
+          </Container>
+        </SimpleBar>
       </div>
       <div className="vertical-overlay"></div>
     </React.Fragment>
