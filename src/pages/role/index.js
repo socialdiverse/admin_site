@@ -11,7 +11,7 @@ import {
   Table,
 } from "reactstrap";
 import Select from "react-select";
-import BreadCrumb from "../../components/common/BreadCrumb";
+import BreadCrumb from "../../components/BreadCrumb";
 import DualListBox from "react-dual-listbox";
 import ModalUpdate from "./update";
 import { useEffect } from "react";
@@ -32,7 +32,7 @@ const RolePage = () => {
   function tog_create() {
     setmodal_create(!modal_create);
   }
-  
+
   function tog_update(id) {
     if (id) {
       const role = roles.find((x) => x.id === id);

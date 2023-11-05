@@ -9,7 +9,7 @@ import {
   Container,
   Row,
 } from "reactstrap";
-import BreadCrumb from "../../components/common/BreadCrumb";
+import BreadCrumb from "../../components/BreadCrumb";
 
 import { Grid, _ } from "gridjs-react";
 import { useEffect } from "react";

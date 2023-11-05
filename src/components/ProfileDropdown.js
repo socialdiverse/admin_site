@@ -7,7 +7,7 @@ import {
 } from "reactstrap";
 
 //import images
-import avatar1 from "../../assets/images/users/avatar-1.jpg";
+import avatar1 from "../assets/images/users/avatar-1.jpg";
 
 const ProfileDropdown = () => {
   //Dropdown Toggle

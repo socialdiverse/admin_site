@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import Route from "./routes";
-import Spinner from "./components/common/Spinner";
+import Spinner from "./components/Spinner";
 import { spinnerAtom } from "./recoil/spinner";
 import { GetAll } from "./services/notification.service";
 import { notificationAtom } from "./recoil/notification";

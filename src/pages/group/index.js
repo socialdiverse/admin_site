@@ -1,7 +1,7 @@
 import React from "react";
 import MetaTags from "react-meta-tags";
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
-import BreadCrumb from "../../components/common/BreadCrumb";
+import BreadCrumb from "../../components/BreadCrumb";
 
 import { Grid, _ } from 'gridjs-react';
 

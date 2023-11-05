@@ -1,0 +1,3 @@
+// Layout Type
+export const CHANGE_LAYOUT = "CHANGE_LAYOUT";
+export const CHANGE_SIDEBAR_THEME = "CHANGE_SIDEBAR_THEME";

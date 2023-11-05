@@ -8,6 +8,3 @@ export const Delete = (params) => api.delete(baseUrl, params);
 export const Update = (params) => api.create(baseUrl, params);
 export const UpdateAvatar = (params) => api.create(baseUrl + '/change-avatar', params);
 export const UpdatePassword = (params) => api.create(baseUrl + '/change-password', params);
-export const GetCurrentUser = () => {
-    return api.get(baseUrl + '/get-current-user');
-};
