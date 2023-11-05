@@ -99,7 +99,7 @@ const UserPage = () => {
       });
     }
   }
-  
+   
   useEffect(() => {
     fetchUser();
   }, []);
