@@ -29,7 +29,7 @@ const Navdata = () => {
 
   const menuItems = [
     {
-      label: "Menu",
+      label: "Danh sách",
       isHeader: true,
     },
     {

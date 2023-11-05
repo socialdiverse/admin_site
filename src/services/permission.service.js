@@ -1,5 +1,5 @@
 import { APIClient } from '../helpers/api_helper';
-const baseUrl = `permissions`;
+const baseUrl = `perms`;
 const api = new APIClient();
 
 export const Get = (params) => api.get(baseUrl, params);

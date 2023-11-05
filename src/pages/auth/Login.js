@@ -40,8 +40,8 @@ const Login = (props) => {
     onSubmit: (values) => {
       OnLogin(values).then((res) => {
         if (res) {
-          localStorage.setItem(CURRENT_USER, JSON.stringify(res.user));
-          history.push("/users");
+          localStorage.setItem(CURRENT_USER, JSON.stringify(res));
+          history.push("/");
         }
       });
     },
