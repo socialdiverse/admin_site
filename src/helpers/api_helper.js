@@ -1,18 +1,21 @@
 import axios from "axios";
+import { ACCESS_TOKEN } from "./constants/global.variable";
 let isRefreshing = false;
 let failedQueue = [];
+const accessToken = localStorage.getItem(ACCESS_TOKEN); 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_URL + "/api/",
   headers: {
     "Content-Type": "application/json",
+    "Authorization": `bearer ${accessToken}`,
   },
 });
 
 api.defaults.headers.post["Content-Type"] = "application/json";
-let blackListUrl = ["auth/login", "auth/refresh"];
+let blackListUrl = ["auth/login", "auth/refresh-token"];
 // intercepting to capture errors
 api.interceptors.request.use(function (req) {
-  req.withCredentials = true;
+  // req.withCredentials = true;
   return req;
 });
 const processQueue = (error, token = null) => {
@@ -43,7 +46,7 @@ api.interceptors.response.use(
             failedQueue.push({ resolve, reject });
           })
             .then((token) => {
-              originalRequest.headers["Authorization"] = "Bearer " + token;
+              originalRequest.headers["Authorization"] = "bearer " + token;
               return api(originalRequest);
             })
             .catch((err) => {
@@ -55,7 +58,7 @@ api.interceptors.response.use(
         isRefreshing = true;
         return new Promise(function (resolve, reject) {
           api
-            .get("auth/refresh")
+            .get("auth/refresh-token")
             .then((rs) => {
               originalRequest.headers["Authorization"] = `bearer ${rs}`;
               processQueue(null, rs);
@@ -84,11 +87,10 @@ class APIClient {
         paramKeys.push(key + "=" + params[key]);
         return paramKeys;
       });
-      const queryString =
-        paramKeys && paramKeys.length ? paramKeys.join("&") : "";
+      const queryString =  paramKeys && paramKeys.length ? paramKeys.join("&") : "";
       response = api.get(`${url}?${queryString}`, params);
     } else {
-      response = api.get(`${url}`, params);
+      response = api.get(`${url}`);
     }
     return response;
   };

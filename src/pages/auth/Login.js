@@ -22,7 +22,7 @@ import { useFormik } from "formik";
 import logoLight from "../../assets/images/logo-light.png";
 import { Login as OnLogin } from "../../services/auth.service";
 import { useHistory } from "react-router-dom";
-import { CURRENT_USER } from "../../helpers/constants/global.variable";
+import { ACCESS_TOKEN, CURRENT_USER, REFRESH_TOKEN } from "../../helpers/constants/global.variable";
 
 const Login = (props) => {
   const history = useHistory();
@@ -39,8 +39,10 @@ const Login = (props) => {
     }),
     onSubmit: (values) => {
       OnLogin(values).then((res) => {
-        if (res) {
-          localStorage.setItem(CURRENT_USER, JSON.stringify(res));
+        if (res) { 
+          localStorage.setItem(ACCESS_TOKEN, JSON.stringify(res.accessToken));
+          localStorage.setItem(REFRESH_TOKEN, JSON.stringify(res.refreshToken));
+          localStorage.setItem(CURRENT_USER, JSON.stringify(res.user));
           history.push("/");
         }
       });
