@@ -30,11 +30,11 @@ const Login = (props) => {
     enableReinitialize: true,
 
     initialValues: {
-      username: "admin" || "",
+      email: "admin@gmail.com" || "",
       password: "123456" || "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("Please Enter Your Account"),
+      email: Yup.string().required("Please Enter Your Account"),
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: (values) => {
@@ -89,28 +89,28 @@ const Login = (props) => {
                       action="#"
                     >
                       <div className="mb-3">
-                        <Label htmlFor="username" className="form-label">
+                        <Label htmlFor="email" className="form-label">
                           Username
                         </Label>
                         <Input
-                          name="username"
+                          name="email"
                           className="form-control"
                           placeholder="Enter account"
                           type="text"
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
-                          value={validation.values.username || ""}
+                          value={validation.values.email || ""}
                           invalid={
-                            validation.touched.username &&
-                            validation.errors.username
+                            validation.touched.email &&
+                            validation.errors.email
                               ? true
                               : false
                           }
                         />
-                        {validation.touched.username &&
-                        validation.errors.username ? (
+                        {validation.touched.email &&
+                        validation.errors.email ? (
                           <FormFeedback type="invalid">
-                            {validation.errors.username}
+                            {validation.errors.email}
                           </FormFeedback>
                         ) : null}
                       </div>
