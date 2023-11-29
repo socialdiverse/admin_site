@@ -6,7 +6,7 @@ import queryString from "query-string";
 let isRefreshing = false;
 let failedQueue = [];
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL + "/api/",
+  baseURL: import.meta.env.VITE_API_URL + "/api/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -88,7 +88,7 @@ class APIClient {
   http;
   constructor() {
     this.http = axios.create({
-      baseURL: process.env.REACT_APP_API_URL + "/api/",
+      baseURL: import.meta.env.VITE_API_URL + "/api/",
       headers: this.#getHeadersConfig(),
       timeout: 100000,
     });
@@ -132,7 +132,7 @@ class AxiosInstance {
 
   constructor() {
     this.#_axiosInstance = axios.create({
-      baseURL: process.env.REACT_APP_API_URL + "/api/",
+      baseURL: import.meta.env.VITE_API_URL + "/api/",
       timeout: 100000,
     });
     this.#_axiosInstance.interceptors.request.use(
