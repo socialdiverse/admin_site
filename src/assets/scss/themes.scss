@@ -1,3 +1,7 @@
+@import "node_modules/bootstrap/scss/functions";
+@import "node_modules/bootstrap/scss/variables";
+@import "node_modules/bootstrap/scss/mixins";
+
 @import "../scss/icons.scss";
 @import "../scss/config/default/bootstrap.scss";
 @import "../scss/config/default/app.scss";
@@ -407,9 +411,9 @@ body {
 @each $color, $value in $theme-colors {
   .simplebar-track-#{$color} {
     .simplebar-scrollbar:before{
-      background: $value !important; 
+      background: $value !important;
     }
-  }   
+  }
 }
 
 // chat
