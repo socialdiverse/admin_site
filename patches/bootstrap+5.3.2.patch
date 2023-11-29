@@ -1,0 +1,23 @@
+diff --git a/node_modules/bootstrap/scss/_functions.scss b/node_modules/bootstrap/scss/_functions.scss
+index 9029658..8f8381f 100644
+--- a/node_modules/bootstrap/scss/_functions.scss
++++ b/node_modules/bootstrap/scss/_functions.scss
+@@ -32,9 +32,17 @@
+   }
+ }
+ 
++@function get-valid-color($color) {
++  @if type-of($color) != color {
++    @return $primary;
++  } @else {
++    @return $color;
++  }
++}
++
+ // Colors
+ @function to-rgb($value) {
+-  @return red($value), green($value), blue($value);
++  @return red(get-valid-color($value)), green(get-valid-color($value)), blue(get-valid-color($value));
+ }
+ 
+ // stylelint-disable scss/dollar-variable-pattern
