@@ -28,11 +28,16 @@ const UserPage = () => {
   const [userDataGrid, setUserDataGrid] = useState([]);
   const columns = [
     "Id",
-    "Name",
+    "FirstName",
+    "LastName",
     "Email",
+    "Gender",
+    "Mobile",
+    "Role",
+    "IsOnline",
     {
-      name: "",
-      width: "200px",
+      name: "Setting",
+      width: "100px",
       formatter: (cell, row) => {
         return _(
           <div className="d-flex">
@@ -99,7 +104,7 @@ const UserPage = () => {
       });
     }
   }
-   
+
   useEffect(() => {
     fetchUser();
   }, []);

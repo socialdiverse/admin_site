@@ -3,7 +3,6 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "./constants/global.variable";
 import { StatusCode } from "./constants/api";
 import queryString from "query-string";
 
-
 class AxiosInstance {
   #_axiosInstance;
   #blackList = ["auth/login", "auth/refresh-token"];
@@ -101,7 +100,7 @@ class AxiosInstance {
    * @config - { Object }.
    * @response Promise axios delete method.
    * */
-  delete(url, payload= {}, config = {}) {
+  delete(url, payload = {}, config = {}) {
     return this.#_axiosInstance.delete(
       `${url}?${queryString.stringify(payload)}`,
       config
@@ -115,16 +114,16 @@ class AxiosInstance {
   getHeader() {
     return {
       "Content-Type": "application/json",
-      "x-access-token": this.getToken(),
+      Authorization: `Bearer ${this.getToken()}`,
     };
   }
 
   getToken() {
-    return localStorage.getItem(ACCESS_TOKEN) || "";
+    return JSON.parse(localStorage.getItem(ACCESS_TOKEN)) || "";
   }
 
   getRefreshToken() {
-    return localStorage.getItem(REFRESH_TOKEN) || "";
+    return JSON.parse(localStorage.getItem(REFRESH_TOKEN)) || "";
   }
 
   async handleRefreshToken(originalConfig) {
@@ -140,5 +139,4 @@ class AxiosInstance {
   }
 }
 
-export const apiClient = new AxiosInstance()
-
+export const apiClient = new AxiosInstance();
