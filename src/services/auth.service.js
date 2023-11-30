@@ -1,15 +1,10 @@
-import { APIClient } from "../helpers/api_helper";
+import { apiClient } from "../helpers/api_helper";
 
-const baseUrl = "auth";
-const api = new APIClient();
+const resource  = 'auth';
 
-export const Login = (data) =>
-  api.create(baseUrl + "/login", data).then((res) => {
-    return res;
-  });
-export const LogoutApi = () => api.get(baseUrl + "/logout");
-export const Register = (data) => api.create(baseUrl + "/register", data);
+export const Login = (data) => apiClient.post(`${resource}/login`, data);
 
-export const Logout = () => {
-  LogoutApi();
-};
+export const LogoutApi = () => apiClient.fetch(`${resource}/logout`);
+
+export const Register = (data) => apiClient.post(`${resource}/register`, data);
+

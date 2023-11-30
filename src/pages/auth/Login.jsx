@@ -26,6 +26,7 @@ const Login = (props) => {
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: (values) => {
+      console.log('===values',values)
       OnLogin(values).then((res) => {
         if (res) {
           localStorage.setItem(ACCESS_TOKEN, JSON.stringify(res.accessToken));
