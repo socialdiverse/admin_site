@@ -129,8 +129,8 @@ class AxiosInstance {
   async handleRefreshToken(originalConfig) {
     try {
       const rs = await this.#_axiosInstance.get("auth/refresh-token");
-      // localStorage.setItem(ACCESS_TOKEN, JSON.stringify(rs.accessToken));
-      // localStorage.setItem(REFRESH_TOKEN, JSON.stringify(rs.refreshToken));
+      localStorage.setItem(ACCESS_TOKEN, JSON.stringify(rs.accessToken));
+      localStorage.setItem(REFRESH_TOKEN, JSON.stringify(rs.refreshToken));
       //TODO: update token
       return this.#_axiosInstance(originalConfig);
     } catch (_error) {

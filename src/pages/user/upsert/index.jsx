@@ -13,7 +13,8 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const ModalUpdate = ({ data, is_show, settog_update, handleOnCreate }) => {
+const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
+  console.log(data);
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -34,17 +35,17 @@ const ModalUpdate = ({ data, is_show, settog_update, handleOnCreate }) => {
       id="myModal"
       isOpen={is_show}
       toggle={() => {
-        settog_update();
+        settog_upsert();
       }}
     >
       <ModalHeader
         className="modal-title"
         id="myModalLabel"
         toggle={() => {
-          settog_update();
+          settog_upsert();
         }}
       >
-        Thêm vai trò
+        {data.id ? "Sửa thông tin người dùng" : "Thêm người dùng"}
       </ModalHeader>
       <ModalBody>
         <Form
@@ -95,11 +96,11 @@ const ModalUpdate = ({ data, is_show, settog_update, handleOnCreate }) => {
             </div>
           </div>
           <div className="">
-            <Button color="light" type="button" onClick={() => settog_update()}>
+            <Button color="light" type="button" onClick={() => settog_upsert()}>
               Đóng
             </Button>
             <Button color="primary" className="mx-2" type="submit">
-              Lưu lại
+              {data.id ? "Cập nhật" : "Thêm"}
             </Button>
           </div>
         </Form>
@@ -108,4 +109,4 @@ const ModalUpdate = ({ data, is_show, settog_update, handleOnCreate }) => {
   );
 };
 
-export default ModalUpdate;
+export default ModalUpsert;
