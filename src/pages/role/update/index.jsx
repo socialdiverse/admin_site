@@ -94,7 +94,7 @@ const ModalUpdate = ({ data, isShow, tog_create, handleOnCreate }) => {
               ></textarea>
             </div>
           </div>
-          <div className="">
+          <div>
             <Button color="light" type="button" onClick={() => tog_create()}>
               Đóng
             </Button>

@@ -22,6 +22,7 @@ import {
 import { useState } from "react";
 import ModalDelete from "./delete";
 import ModalUpsert from "./upsert";
+import ModalUpdate from "./upsert";
 
 const UserPage = () => {
   const [tog_upsert, settog_upsert] = useState(false);
@@ -197,7 +198,7 @@ const UserPage = () => {
               </Card>
             </Col>
           </Row>
-          <ModalUpsert
+          <ModalUpdate
             data={dataEdit}
             settog_upsert={ontog_upsert}
             is_show={tog_upsert}
