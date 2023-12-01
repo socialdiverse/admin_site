@@ -13,10 +13,12 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@aspnet/signalr": "^1.0.27",
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ckeditor/ckeditor5-react": "^6.0.0",
     "@ckeditor/ckeditor5-upload": "^37.0.1",
     "@emotion/babel-plugin": "^11.11.0",
+    "@microsoft/signalr": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "axios": "^0.26.0",
