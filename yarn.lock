@@ -167,6 +167,13 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
+"@babel/runtime@^7.21.0":
+  version "7.23.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.23.5.tgz#11edb98f8aeec529b82b211028177679144242db"
+  integrity sha512-NdUTHcPe4C99WxPub+K9l9tK5/lV4UXIoaHSYgzco9BCyjKAAwzdBI+wWtYqHt7LJdbo74ZjRPJgzVweq1sz0w==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
 "@babel/template@^7.22.15":
   version "7.22.15"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.22.15.tgz#09576efc3830f0430f4548ef971dde1350ef2f38"
@@ -1594,7 +1601,7 @@ ckeditor5@^32.0.0:
     "@ckeditor/ckeditor5-utils" "^32.0.0"
     "@ckeditor/ckeditor5-widget" "^32.0.0"
 
-classnames@^2.2.3, classnames@^2.2.5:
+classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -1714,6 +1721,13 @@ data-urls@^5.0.0:
   dependencies:
     whatwg-mimetype "^4.0.0"
     whatwg-url "^14.0.0"
+
+date-fns@^2.30.0:
+  version "2.30.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.30.0.tgz#f367e644839ff57894ec6ac480de40cae4b0f4d0"
+  integrity sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
 
 debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4, debug@~4.3.1, debug@~4.3.2:
   version "4.3.4"
@@ -3018,6 +3032,18 @@ react-countup@^6.1.1:
   dependencies:
     countup.js "^2.8.0"
 
+react-datepicker@^4.24.0:
+  version "4.24.0"
+  resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-4.24.0.tgz#dfb12e277993f1ae2d350b7ba4dd6bba7d21bfb1"
+  integrity sha512-2QUC2pP+x4v3Jp06gnFllxKsJR0yoT/K6y86ItxEsveTXUpsx+NBkChWXjU0JsGx/PL8EQnsxN0wHl4zdA1m/g==
+  dependencies:
+    "@popperjs/core" "^2.11.8"
+    classnames "^2.2.6"
+    date-fns "^2.30.0"
+    prop-types "^15.7.2"
+    react-onclickoutside "^6.13.0"
+    react-popper "^2.3.0"
+
 react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
@@ -3055,6 +3081,24 @@ react-flatpickr@^3.10.13:
     flatpickr "^4.6.2"
     prop-types "^15.5.10"
 
+react-flip-move@^3.0.4:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/react-flip-move/-/react-flip-move-3.0.5.tgz#8b87510ad32ebef01ebca94902b445f456bbc0f7"
+  integrity sha512-Mf4XpbkUNZy9eu80iXXFIjToDvw+bnHxmKHVoositbMpV87O/EQswnXUqVovRHoTx/F+4dE+p//PyJnAT7OtPA==
+
+react-icons@^4.12.0:
+  version "4.12.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-4.12.0.tgz#54806159a966961bfd5cdb26e492f4dafd6a8d78"
+  integrity sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==
+
+react-images-upload@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/react-images-upload/-/react-images-upload-1.2.8.tgz#d1e993c50a0ca266aa7a9c7b7456167d80e9e6ab"
+  integrity sha512-d5mhAE0BfkLTlG5MLvKVw+q76LL8r5easgWW0TTBvXD8n6HXeLMZLwCuPiOibY1a3NRMXI4AnM1r34dqLOBjng==
+  dependencies:
+    react "^16.12.0"
+    react-flip-move "^3.0.4"
+
 react-is@^16.13.1, react-is@^16.6.0, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
@@ -3070,7 +3114,12 @@ react-meta-tags@^1.0.1:
   resolved "https://registry.yarnpkg.com/react-meta-tags/-/react-meta-tags-1.0.1.tgz#be18e88adafca280d6bd12839b530f9cfb7edbab"
   integrity sha512-uylBI9UOI0QCGDsl6PlZaHnp+MxEpwslTlicPjnlcD68I8Kl2hdbuAZBRih+yU5StArSMB6T0jBrgst6rAuDYQ==
 
-react-popper@^2.2.4:
+react-onclickoutside@^6.13.0:
+  version "6.13.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.13.0.tgz#e165ea4e5157f3da94f4376a3ab3e22a565f4ffc"
+  integrity sha512-ty8So6tcUpIb+ZE+1HAhbLROvAIJYyJe/1vRrrcmW+jLsaM+/powDRqxzo6hSh9CuRZGSL1Q8mvcF5WRD93a0A==
+
+react-popper@^2.2.4, react-popper@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-2.3.0.tgz#17891c620e1320dce318bad9fede46a5f71c70ba"
   integrity sha512-e1hj8lL3uM+sgSR4Lxzn5h1GxBlpa4CQz0XLF8kx4MDrDRWY0Ena4c97PUeSX9i5W3UAfDP0z0FXCTQkoXUl3Q==
@@ -3153,6 +3202,15 @@ react-transition-group@^4.3.0, react-transition-group@^4.4.2:
     "@babel/runtime" "^7.5.5"
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
+    prop-types "^15.6.2"
+
+react@^16.12.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
     prop-types "^15.6.2"
 
 react@^17.0.2:
