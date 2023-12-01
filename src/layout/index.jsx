@@ -31,7 +31,7 @@ const Layout = (props) => {
       dispatch(changeLayout(layoutType));
     }
     SignalRConnection("/chat");
-    SignalRConnection("/notification");
+    // SignalRConnection("/notification");
   }, [layoutType, leftSidebarType, dispatch]);
 
   // class add remove in header

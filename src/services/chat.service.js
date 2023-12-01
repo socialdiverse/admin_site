@@ -6,9 +6,9 @@ export const SignalRConnection = (module) => {
     .withUrl(URL + module, {
       skipNegotiation: true,
       transport:
-        signalR.HttpTransportType.WebSockets ||
-        signalR.HttpTransportType.LongPolling,
+        signalR.HttpTransportType.WebSockets
     })
+    .configureLogging(signalR.LogLevel.Information)
     .withAutomaticReconnect()
     .build();
     
