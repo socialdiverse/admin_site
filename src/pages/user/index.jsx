@@ -83,6 +83,7 @@ const UserPage = () => {
   }
 
   function handleOnUpdate(dataUpdate) {
+    console.log(dataUpdate);
     if (dataUpdate.id) {
       UpdateUser(dataUpdate).then((res) => {
         setUsers([...users, res]);

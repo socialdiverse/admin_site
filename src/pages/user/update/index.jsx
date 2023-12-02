@@ -13,7 +13,7 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const ModalUpdate = ({ data, is_show, settog_update, handleOnCreate }) => {
+const ModalUpdate = ({ data, is_show, settog_update, handleOnUpdate }) => {
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -25,7 +25,7 @@ const ModalUpdate = ({ data, is_show, settog_update, handleOnCreate }) => {
       title: Yup.string().required("Trường này không được để trống !"),
     }),
     onSubmit: (values) => {
-      handleOnCreate(values);
+      handleOnUpdate(values);
     },
   });
 
