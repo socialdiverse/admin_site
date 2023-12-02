@@ -82,6 +82,21 @@ class AxiosInstance {
     return this.#_axiosInstance.post(url, payload, config);
   }
 
+  postFile(url, file, config = {}) {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const updatedConfig = {
+      ...config,
+      headers: {
+        ...config.headers,
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    return apiClient.post(url, formData, updatedConfig);
+  }
+
   /**
    * @patch method auto inject header token.
    * @param url - { String }, payload - { String }.

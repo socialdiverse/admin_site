@@ -47,7 +47,7 @@ const ModalUpdate = ({ data, isShow, tog_create, handleOnCreate }) => {
         Thêm vai trò
       </ModalHeader>
       <ModalBody>
-        <Form
+        <form
           onSubmit={(e) => {
             e.preventDefault();
             validation.handleSubmit();
@@ -102,7 +102,7 @@ const ModalUpdate = ({ data, isShow, tog_create, handleOnCreate }) => {
               Lưu lại
             </Button>
           </div>
-        </Form>
+        </form>
       </ModalBody>
     </Modal>
   );

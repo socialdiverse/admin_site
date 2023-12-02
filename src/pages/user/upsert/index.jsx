@@ -18,72 +18,35 @@ import * as Yup from "yup";
 import ReactDatePicker from "../../../components/DatePicker";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Get as FetchLocation } from "../../../services/location.service";
+import { PostFile } from "../../../services/file.service";
+import { Create } from "../../../services/user.service";
 
 const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
-  const [formData, setFormData] = useState(data);
   const [addressData, setAddressData] = useState();
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState();
 
+  const [avatarFile, setAvatarFile] = useState();
+  const [bgFile, setBgFile] = useState();
+
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [password, setPassword] = useState("");
+  const [groupIds, setGroupIds] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [gender, setGender] = useState(false); //
+  const [relationship, setRelationship] = useState(false);
+  const [bio, setBio] = useState("");
+  const [status, setStatus] = useState(false);
+
+  const [bgLink, setBgLink] = useState();
+  const [avatarLink, setAvatarLink] = useState();
   const [provinceId, setProvinceId] = useState();
   const [districtId, setDistrictId] = useState();
   const [wardId, setWardId] = useState();
-
   const [selectedDate, setDate] = useState(new Date());
-
-  const validation = useFormik({
-    initialValues: {
-      email: "",
-      // firstName: "",
-      // lastName: "",
-      // mobile: "",
-      // password: "",
-      // groupIds: [],
-      // gender: "",
-      // relationships: "",
-      // dob: new Date(),
-      // confirmedPassword: "",
-      // avatar: "",
-      // background: "",
-      // status: "",
-      // provinceId: "",
-      // districtId: "",
-      // wardId: "",
-    },
-    validationSchema: Yup.object({
-      // firstName: Yup.string()
-      //   .required("Required")
-      //   .min(4, "Must be 4 characters or more"),
-      // lastName: Yup.string()
-      //   .required("Required")
-      //   .min(4, "Must be 4 characters or more"),
-      email: Yup.string()
-        .required("Required")
-        .matches(
-          /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-          "Please enter a valid email address"
-        ),
-      // password: Yup.string()
-      //   .required("Required")
-      //   .matches(
-      //     /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d][A-Za-z\d!@#$%^&*()_+]{7,19}$/,
-      //     "Password must be 7-19 characters and contain at least one letter, one number and a special character"
-      //   ),
-      // confirmedPassword: Yup.string()
-      //   .required("Required")
-      //   .oneOf([Yup.ref("password"), null], "Password must match"),
-      // mobile: Yup.string()
-      //   .required("Required")
-      //   .matches(
-      //     /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
-      //     "Must be a valid phone number"
-      //   ),
-    }),
-    onSubmit: (values) => {
-      console.log("aaaaaaaaaaaaaaa");
-    },
-  });
 
   const changeProvince = (event) => {
     setProvinceId(event.target.value);
@@ -107,6 +70,34 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
     setWardId(event.target.value);
   };
 
+  const uploadImage = (isAvatar) => {
+    if (isAvatar) {
+      PostFile(avatarFile).then((res) => {
+        setAvatarLink(res);
+      });
+    }
+    PostFile(bgFile).then((res) => {
+      setBgLink(res);
+    });
+  };
+
+  const handleAvatarChange = (e) => {
+    setAvatarFile(e.target.files[0]);
+  };
+
+  const handleBgChange = (e) => {
+    setBgFile(e.target.files[0]);
+  };
+
+  useEffect(() => {
+    FetchLocation().then((res) => {
+      setAddressData(res);
+      setProvinces(res.address.provinces);
+      setDistricts(res.address.districts);
+      setWards(res.address.wards);
+    });
+  }, []);
+
   return (
     <Modal
       isOpen={is_show}
@@ -128,11 +119,11 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
         <Form
           onSubmit={(e) => {
             e.preventDefault();
-            validation.handleSubmit;
+            submitData();
             return false;
           }}
         >
-          {/* <Row>
+          <Row>
             <Col md={6}>
               <Label for="avatar" className="mx-2">
                 Avatar
@@ -143,28 +134,40 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="avatar"
                   placeholder="Avatar"
                   type="file"
+                  onChange={handleAvatarChange}
                 />
-                <Button>Upload</Button>
+                <Button onClick={() => uploadImage(true)}>Upload</Button>
               </div>
+              {avatarLink && (
+                <Label for="avatar1" className="mx-2 d-block">
+                  {avatarLink.length > 40
+                    ? `${avatarLink.slice(0, 40)}...`
+                    : avatarLink}
+                </Label>
+              )}
             </Col>
             <Col md={6}>
-              <FormGroup>
-                <Label for="bg_image" className="mx-2">
-                  Background Image
+              <Label for="background" className="mx-2">
+                Background
+              </Label>
+              <div className="d-flex">
+                <Input
+                  id="background"
+                  name="background"
+                  placeholder="Background"
+                  type="file"
+                  onChange={handleBgChange}
+                />
+                <Button onClick={uploadImage}>Upload</Button>
+              </div>
+              {bgLink && (
+                <Label for="bg1" className="mx-2">
+                  {bgLink.length > 40 ? `${bgLink.slice(0, 40)}...` : bgLink}
                 </Label>
-                <div className="d-flex">
-                  <Input
-                    id="bg_image"
-                    name="bg_image"
-                    type="file"
-                    className="mr-2"
-                  />
-                  <Button>Upload</Button>
-                </div>
-              </FormGroup>
+              )}
             </Col>
-          </Row> */}
-          <Row>
+          </Row>
+          <Row className="mt-4">
             <Col md={6}>
               <FormGroup floating>
                 <Input
@@ -172,21 +175,10 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="email"
                   placeholder="Email"
                   type="email"
-                  onChange={validation.handleChange}
-                  onBlur={validation.handleBlur}
-                  value={validation.values.email || ""}
-                  invalid={
-                    validation.touched.email && validation.errors.email
-                      ? true
-                      : false
-                  }
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <Label for="email">Email</Label>
-                {validation.touched.email && validation.errors.email ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.email}
-                  </FormFeedback>
-                ) : null}
               </FormGroup>
             </Col>
             <Col md={6}>
@@ -196,12 +188,42 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="mobile"
                   placeholder="mobile"
                   type="mobile"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
                 />
                 <Label for="mobile">Mobile</Label>
               </FormGroup>
             </Col>
           </Row>
-          {/* <Row>
+          <Row className="mt-4">
+            <Col md={6}>
+              <FormGroup floating>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  placeholder="firstName"
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+                <Label for="email">First Name</Label>
+              </FormGroup>
+            </Col>
+            <Col md={6}>
+              <FormGroup floating>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  placeholder="lastName"
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+                <Label for="lastName">Last Name</Label>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
             <Col md={6}>
               <FormGroup floating>
                 <Input
@@ -209,6 +231,8 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="password"
                   placeholder="Password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <Label for="password">Password</Label>
               </FormGroup>
@@ -226,7 +250,14 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
             </Col>
           </Row>
           <FormGroup floating>
-            <Input id="bio" name="bio" placeholder="Bio" type="text" />
+            <Input
+              id="bio"
+              name="bio"
+              placeholder="Bio"
+              type="text"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+            />
             <Label for="bio">Bio</Label>
           </FormGroup>
           <Row>
@@ -245,16 +276,33 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
             </Col>
             <Col sm={4}>
               <FormGroup check inline className="mt-2">
-                <Input name="radio2" type="radio" /> <Label check>Nam</Label>
+                <Input
+                  name="radio2"
+                  type="radio"
+                  checked={gender === true}
+                  onChange={() => setGender(true)}
+                />
+                <Label check>Nam</Label>
               </FormGroup>
               <FormGroup check inline className="mt-2">
-                <Input name="radio2" type="radio" /> <Label check>Nữ</Label>
+                <Input
+                  name="radio2"
+                  type="radio"
+                  checked={gender === false}
+                  onChange={() => setGender(false)}
+                />
+                <Label check>Nữ</Label>
               </FormGroup>
             </Col>
             <Col md={2}>
               <FormGroup check className="mt-2 mr-2">
                 <Input id="exampleCheckbox" name="checkbox" type="checkbox" />
-                <Label check for="exampleCheckbox">
+                <Label
+                  check
+                  for="exampleCheckbox"
+                  checked={relationship === false}
+                  onChange={() => setRelationship(!relationship)}
+                >
                   Độc thân
                 </Label>
               </FormGroup>
@@ -298,16 +346,26 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
               </Col>
               <Col sm={3}>
                 <FormGroup check inline className="mt-2">
-                  <Input name="radio3" type="radio" />
+                  <Input
+                    name="radio3"
+                    type="radio"
+                    checked={status === true}
+                    onChange={() => setStatus(true)}
+                  />
                   <Label check>Active</Label>
                 </FormGroup>
                 <FormGroup check inline className="mt-2">
-                  <Input name="radio3" type="radio" />
+                  <Input
+                    name="radio3"
+                    type="radio"
+                    checked={status === false}
+                    onChange={() => setStatus(false)}
+                  />
                   <Label check>Inactive</Label>
                 </FormGroup>
               </Col>
             </Row>
-          )} */}
+          )}
           <div className="d-flex justify-content-center">
             <Button
               color="light"
