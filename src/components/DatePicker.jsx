@@ -4,17 +4,16 @@ import PropTypes from "prop-types";
 
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function ReactDatePicker({ startDate, setStartDate }) {
+export default function ReactDatePicker({ formik }) {
   return (
-    <div>
+    <div style={{ zIndex: 1000 }}>
       <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
+        selected={formik.values.dob}
+        onChange={(date) => formik.setFieldValue("dob", date)}
       />
     </div>
   );
 }
 ReactDatePicker.propTypes = {
-  startDate: PropTypes.any.isRequired,
-  setStartDate: PropTypes.func.isRequired,
+  formik: PropTypes.any.isRequired,
 };

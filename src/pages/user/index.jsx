@@ -22,7 +22,6 @@ import {
 import { useState } from "react";
 import ModalDelete from "./delete";
 import ModalUpsert from "./upsert";
-import ModalUpdate from "./upsert";
 
 const UserPage = () => {
   const [tog_upsert, settog_upsert] = useState(false);
@@ -114,7 +113,7 @@ const UserPage = () => {
           u.firstName || "Null",
           u.lastName || "Null",
           u.email,
-          u.gender || "Null",
+          u.gender ? "Nam" : "Nữ",
           u.mobile || "Null",
           getGroups(u.groupIds),
           u.isOnline || "Null",
@@ -125,20 +124,14 @@ const UserPage = () => {
     });
   }
 
-  function handleOnUpsert(dataUpdate) {
-    if (dataUpdate.id) {
-      UpdateUser(dataUpdate).then((res) => {
-        setUsers([...users, res]);
+  function handleOnUpsert(data, isUpdate) {
+    if (isUpdate) {
+      UpdateUser(data).then(() => {
+        fetchUser();
       });
     } else {
-      CreateUser(dataUpdate).then((res) => {
-        const newUsers = users.map((u) => {
-          if (u.id === res.id) {
-            return res;
-          }
-          return u;
-        });
-        setUsers(newUsers);
+      CreateUser(data).then(() => {
+        fetchUser();
       });
     }
   }
@@ -198,11 +191,12 @@ const UserPage = () => {
               </Card>
             </Col>
           </Row>
-          <ModalUpdate
+          <ModalUpsert
             data={dataEdit}
             settog_upsert={ontog_upsert}
             is_show={tog_upsert}
             handleOnUpsert={handleOnUpsert}
+            setDataEdit={setDataEdit}
           />
           <ModalDelete
             data={dataDelete}

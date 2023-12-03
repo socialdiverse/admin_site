@@ -19,9 +19,10 @@ import ReactDatePicker from "../../../components/DatePicker";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Get as FetchLocation } from "../../../services/location.service";
 import { PostFile } from "../../../services/file.service";
-import { Create } from "../../../services/user.service";
-
-const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
+const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
+  const [permOptions, setPermOptions] = useState(
+    data.groupIds ? JSON.parse(data.groupIds) : []
+  );
   const [addressData, setAddressData] = useState();
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -30,55 +31,121 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
   const [avatarFile, setAvatarFile] = useState();
   const [bgFile, setBgFile] = useState();
 
-  const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [groupIds, setGroupIds] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [gender, setGender] = useState(false); //
-  const [relationship, setRelationship] = useState(false);
-  const [bio, setBio] = useState("");
-  const [status, setStatus] = useState(false);
+  const convertDobIntToDate = (dateOfBirth) => {
+    if (dateOfBirth) {
+      let dateString = dateOfBirth.toString();
 
-  const [bgLink, setBgLink] = useState();
-  const [avatarLink, setAvatarLink] = useState();
-  const [provinceId, setProvinceId] = useState();
-  const [districtId, setDistrictId] = useState();
-  const [wardId, setWardId] = useState();
-  const [selectedDate, setDate] = useState(new Date());
+      let day = dateString.substr(0, 2);
+      let month = dateString.substr(2, 2);
+      let year = dateString.substr(4, 4);
 
-  const changeProvince = (event) => {
-    setProvinceId(event.target.value);
-
-    var newDistricts = addressData.address.districts.filter(
-      (district) => district.provinceId == event.target.value
-    );
-    setDistricts(newDistricts);
+      let dateObject = new Date(`${year}-${month}-${day}`);
+      return dateObject;
+    }
   };
 
-  const changeDistrict = (event) => {
-    setDistrictId(event.target.value);
-    setWards(
-      addressData.address.wards.filter(
-        (d) => d.districtId == event.target.value
-      )
-    );
+  const convertDobDateToInt = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const formattedInteger = day * 1000000 + month * 10000 + year;
+
+    return formattedInteger;
   };
 
-  const changeWard = (event) => {
-    setWardId(event.target.value);
-  };
+  const validation = useFormik({
+    enableReinitialize: true,
+
+    initialValues: {
+      email: data.email,
+      mobile: data.mobile,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: "",
+      bio: data.bio || "",
+      confirmPassword: "",
+      gender: data.gender || false,
+      relationship: data.relationship || false,
+      status: data.status || false,
+      dob: convertDobIntToDate(data.dob),
+      provinceId: data.provinceId,
+      districtId: data.districtId,
+      wardId: data.wardId,
+      avatar: data.avatar,
+      background: data.background,
+      groupIds: permOptions,
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .required("Trường này không được để trống !")
+        .matches(
+          /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+          "Please enter a valid email address"
+        ),
+      mobile: Yup.string().required("Trường này không được để trống !"),
+      firstName: Yup.string()
+        .required("Trường này không được để trống !")
+        .min(4, "Must be 4 characters or more"),
+      lastName: Yup.string()
+        .required("Trường này không được để trống !")
+        .min(4, "Must be 4 characters or more"),
+      bio: Yup.string()
+        .required("Trường này không được để trống !")
+        .min(10, "Must be 10 characters or more"),
+      password: Yup.string()
+        .required("Trường này không được để trống !")
+        .min(6, "Must be 6 characters or more"),
+      confirmPassword: Yup.string()
+        .required("Trường này không được để trống !")
+        .oneOf([Yup.ref("password"), null], "Password must match"),
+      gender: Yup.boolean(),
+      // relationship: Yup.boolean().required("Trường này không được để trống !"),
+      // status: Yup.boolean().required("Trường này không được để trống !"),
+      // dob: Yup.date().required("Trường này không được để trống !"),
+      // provinceId: Yup.number().required("Vui lòng chọn tỉnh/thành phố"),
+      // districtId: Yup.number().required("Vui lòng chọn quận/huyện"),
+      // wardId: Yup.number().required("Vui lòng chọn phường/xã"),
+      // avatar: Yup.string(),
+      // background: Yup.string(),
+      groupIds: Yup.array(),
+    }),
+    onSubmit: (values) => {
+      console.log(data.id);
+
+      handleOnUpsert(
+        {
+          email: values.email,
+          mobile: values.mobile,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          password: values.password,
+          bio: values.bio,
+          gender: values.gender ? true : false,
+          relationship: values.relationship,
+          status: values.status,
+          dob: convertDobDateToInt(values.dob),
+          provinceId: values.provinceId,
+          districtId: values.districtId,
+          wardId: values.wardId,
+          avatar: values.avatar,
+          background: values.background,
+          groupIds: `[${values.groupIds.join(" , ")}]`,
+        },
+        data.id ? true : false
+      );
+    },
+  });
 
   const uploadImage = (isAvatar) => {
     if (isAvatar) {
       PostFile(avatarFile).then((res) => {
-        setAvatarLink(res);
+        validation.setFieldValue("avatar", res);
+      });
+    } else {
+      PostFile(bgFile).then((res) => {
+        validation.setFieldValue("background", res);
       });
     }
-    PostFile(bgFile).then((res) => {
-      setBgLink(res);
-    });
   };
 
   const handleAvatarChange = (e) => {
@@ -87,6 +154,29 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
 
   const handleBgChange = (e) => {
     setBgFile(e.target.files[0]);
+  };
+
+  const changeProvince = (event) => {
+    validation.setFieldValue("provinceId", parseInt(event.target.value));
+
+    setDistricts(
+      addressData.address.districts.filter(
+        (district) => district.provinceId == event.target.value
+      )
+    );
+  };
+
+  const changeDistrict = (event) => {
+    validation.setFieldValue("districtId", parseInt(event.target.value));
+    setWards(
+      addressData.address.wards.filter(
+        (d) => d.districtId == event.target.value
+      )
+    );
+  };
+
+  const changeWard = (event) => {
+    validation.setFieldValue("wardId", parseInt(event.target.value));
   };
 
   useEffect(() => {
@@ -100,9 +190,11 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
 
   return (
     <Modal
+      id="myModal"
       isOpen={is_show}
       toggle={() => {
         settog_upsert();
+        validation.resetForm();
       }}
       size="lg"
     >
@@ -111,17 +203,19 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
         id="myModalLabel"
         toggle={() => {
           settog_upsert();
+          validation.resetForm();
         }}
       >
-        {data.id ? "Sửa thông tin người dùng" : "Thêm người dùng"}
+        {data.id ? "Update thông tin người dùng" : "Thêm người dùng"}
       </ModalHeader>
       <ModalBody>
         <Form
           onSubmit={(e) => {
             e.preventDefault();
-            submitData();
+            validation.handleSubmit();
             return false;
           }}
+          action="#"
         >
           <Row>
             <Col md={6}>
@@ -138,11 +232,11 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                 />
                 <Button onClick={() => uploadImage(true)}>Upload</Button>
               </div>
-              {avatarLink && (
+              {validation.values.avatar && (
                 <Label for="avatar1" className="mx-2 d-block">
-                  {avatarLink.length > 40
-                    ? `${avatarLink.slice(0, 40)}...`
-                    : avatarLink}
+                  {validation.values.avatar.length > 40
+                    ? `${validation.values.avatar.slice(0, 40)}...`
+                    : validation.values.avatar}
                 </Label>
               )}
             </Col>
@@ -158,11 +252,13 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   type="file"
                   onChange={handleBgChange}
                 />
-                <Button onClick={uploadImage}>Upload</Button>
+                <Button onClick={() => uploadImage(false)}>Upload</Button>
               </div>
-              {bgLink && (
+              {validation.values.background && (
                 <Label for="bg1" className="mx-2">
-                  {bgLink.length > 40 ? `${bgLink.slice(0, 40)}...` : bgLink}
+                  {validation.values.background.length > 40
+                    ? `${validation.values.background.slice(0, 40)}...`
+                    : validation.values.background}
                 </Label>
               )}
             </Col>
@@ -171,14 +267,24 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
             <Col md={6}>
               <FormGroup floating>
                 <Input
-                  id="email"
                   name="email"
                   placeholder="Email"
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.email || ""}
+                  invalid={
+                    validation.touched.email && validation.errors.email
+                      ? true
+                      : false
+                  }
                 />
                 <Label for="email">Email</Label>
+                {validation.touched.email && validation.errors.email ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.email}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
             <Col md={6}>
@@ -187,15 +293,26 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   id="mobile"
                   name="mobile"
                   placeholder="mobile"
-                  type="mobile"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  type="text"
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.mobile || ""}
+                  invalid={
+                    validation.touched.mobile && validation.errors.mobile
+                      ? true
+                      : false
+                  }
                 />
                 <Label for="mobile">Mobile</Label>
+                {validation.touched.mobile && validation.errors.mobile ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.mobile}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
           </Row>
-          <Row className="mt-4">
+          <Row>
             <Col md={6}>
               <FormGroup floating>
                 <Input
@@ -203,10 +320,21 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="firstName"
                   placeholder="firstName"
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.firstName || ""}
+                  invalid={
+                    validation.touched.firstName && validation.errors.firstName
+                      ? true
+                      : false
+                  }
                 />
                 <Label for="email">First Name</Label>
+                {validation.touched.firstName && validation.errors.firstName ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.firstName}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
             <Col md={6}>
@@ -216,13 +344,25 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="lastName"
                   placeholder="lastName"
                   type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.lastName || ""}
+                  invalid={
+                    validation.touched.lastName && validation.errors.lastName
+                      ? true
+                      : false
+                  }
                 />
                 <Label for="lastName">Last Name</Label>
+                {validation.touched.lastName && validation.errors.lastName ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.lastName}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
           </Row>
+
           <Row>
             <Col md={6}>
               <FormGroup floating>
@@ -231,10 +371,21 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="password"
                   placeholder="Password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.password || ""}
+                  invalid={
+                    validation.touched.password && validation.errors.password
+                      ? true
+                      : false
+                  }
                 />
                 <Label for="password">Password</Label>
+                {validation.touched.password && validation.errors.password ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.password}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
             <Col md={6}>
@@ -244,8 +395,23 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                   name="confirmPassword"
                   placeholder="Confirm Password"
                   type="password"
+                  onChange={validation.handleChange}
+                  onBlur={validation.handleBlur}
+                  value={validation.values.confirmPassword || ""}
+                  invalid={
+                    validation.touched.confirmPassword &&
+                    validation.errors.confirmPassword
+                      ? true
+                      : false
+                  }
                 />
                 <Label for="confirmPassword">Confirm Password</Label>
+                {validation.touched.confirmPassword &&
+                validation.errors.confirmPassword ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.confirmPassword}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
           </Row>
@@ -255,32 +421,44 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
               name="bio"
               placeholder="Bio"
               type="text"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.bio || ""}
+              invalid={
+                validation.touched.bio && validation.errors.bio ? true : false
+              }
             />
             <Label for="bio">Bio</Label>
+            {validation.touched.bio && validation.errors.bio ? (
+              <FormFeedback type="invalid">
+                {validation.errors.bio}
+              </FormFeedback>
+            ) : null}
           </FormGroup>
           <Row>
             <Col md={6}>
-              <div className="d-flex align-items-center">
-                <ReactDatePicker
-                  setStartDate={setDate}
-                  startDate={selectedDate}
-                />
+              <div id="dob" className="d-flex align-items-center">
+                <ReactDatePicker formik={validation} />
                 <div className="p-1">
-                  <span className="input-group-text">
+                  <label className="input-group-text">
                     <FaCalendarAlt />
-                  </span>
+                  </label>
                 </div>
+                {validation.touched.dob && validation.errors.dob ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.dob}
+                  </FormFeedback>
+                ) : null}
               </div>
             </Col>
-            <Col sm={4}>
+            <Col sm={3}>
               <FormGroup check inline className="mt-2">
                 <Input
                   name="radio2"
                   type="radio"
-                  checked={gender === true}
-                  onChange={() => setGender(true)}
+                  value={validation.values.gender}
+                  checked={validation.values.gender === true}
+                  onChange={() => validation.setFieldValue("gender", true)}
                 />
                 <Label check>Nam</Label>
               </FormGroup>
@@ -288,90 +466,132 @@ const ModalUpsert = ({ data, is_show, settog_upsert, handleOnCreate }) => {
                 <Input
                   name="radio2"
                   type="radio"
-                  checked={gender === false}
-                  onChange={() => setGender(false)}
+                  value={validation.values.gender}
+                  checked={validation.values.gender === false}
+                  onChange={() => validation.setFieldValue("gender", false)}
                 />
                 <Label check>Nữ</Label>
+                {validation.touched.gender && validation.errors.gender ? (
+                  <FormFeedback type="invalid">
+                    {validation.errors.gender}
+                  </FormFeedback>
+                ) : null}
               </FormGroup>
             </Col>
-            <Col md={2}>
+            <Col md={3}>
               <FormGroup check className="mt-2 mr-2">
-                <Input id="exampleCheckbox" name="checkbox" type="checkbox" />
-                <Label
-                  check
-                  for="exampleCheckbox"
-                  checked={relationship === false}
-                  onChange={() => setRelationship(!relationship)}
-                >
-                  Độc thân
+                <Input
+                  id="relationship"
+                  name="relationship"
+                  type="checkbox"
+                  checked={validation.values.relationship}
+                  onChange={validation.handleChange}
+                />
+                <Label check for="relationship">
+                  Trong mối quan hệ
                 </Label>
               </FormGroup>
             </Col>
           </Row>
-          {addressData && (
-            <Row className="mt-2">
-              <Col md={3}>
-                <Input className="mb-3" type="select" onChange={changeProvince}>
-                  <option>Tỉnh, Thành phố</option>
-                  {provinces &&
-                    provinces.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.title}
-                      </option>
-                    ))}
-                </Input>
-              </Col>
-              <Col md={3}>
-                <Input className="mb-3" type="select" onChange={changeDistrict}>
-                  <option>Quận, Huyện</option>
-                  {districts &&
-                    districts.map((d) => (
-                      <option key={d.id} value={d.id}>
-                        {d.title}
-                      </option>
-                    ))}
-                </Input>
-              </Col>
-              <Col md={3}>
-                <Input className="mb-3" type="select" onChange={changeWard}>
-                  <option>Phường, Xã</option>
+          <Row className="mt-2">
+            <Col md={3}>
+              <Input className="mb-3" type="select" onChange={changeProvince}>
+                <option>Tỉnh, Thành phố</option>
+                {provinces &&
+                  provinces.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.title}
+                    </option>
+                  ))}
+              </Input>
+            </Col>
+            <Col md={3}>
+              <Input className="mb-3" type="select" onChange={changeDistrict}>
+                <option>Quận, Huyện</option>
+                {districts &&
+                  districts.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.title}
+                    </option>
+                  ))}
+              </Input>
+            </Col>
+            <Col md={3}>
+              <Input className="mb-3" type="select" onChange={changeWard}>
+                <option>Phường, Xã</option>
 
-                  {wards &&
-                    wards.map((w) => (
-                      <option key={w.id} value={w.id}>
-                        {w.title}
-                      </option>
-                    ))}
-                </Input>
-              </Col>
-              <Col sm={3}>
-                <FormGroup check inline className="mt-2">
-                  <Input
-                    name="radio3"
-                    type="radio"
-                    checked={status === true}
-                    onChange={() => setStatus(true)}
-                  />
-                  <Label check>Active</Label>
-                </FormGroup>
-                <FormGroup check inline className="mt-2">
-                  <Input
-                    name="radio3"
-                    type="radio"
-                    checked={status === false}
-                    onChange={() => setStatus(false)}
-                  />
-                  <Label check>Inactive</Label>
-                </FormGroup>
-              </Col>
-            </Row>
-          )}
+                {wards &&
+                  wards.map((w) => (
+                    <option key={w.id} value={w.id}>
+                      {w.title}
+                    </option>
+                  ))}
+              </Input>
+            </Col>
+            <Col sm={3}>
+              <FormGroup check inline className="mt-2">
+                <Input
+                  name="radio3"
+                  type="radio"
+                  value={validation.values.status}
+                  checked={validation.values.status === 1}
+                  onChange={() => validation.setFieldValue("status", 1)}
+                />
+                <Label check>Active</Label>
+              </FormGroup>
+              <FormGroup check inline className="mt-2">
+                <Input
+                  name="radio3"
+                  type="radio"
+                  value={validation.values.status}
+                  checked={validation.values.status === 0}
+                  onChange={() => validation.setFieldValue("status", 0)}
+                />
+                <Label check>Inactive</Label>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row className="mt-2 ">
+            <Col sm={12} className="d-flex justify-content-center mb-4">
+              <FormGroup check inline className="mt-2">
+                <Input
+                  name="groupIds"
+                  type="checkbox"
+                  onChange={validation.handleChange}
+                  value={1}
+                />
+                <Label check>Admin</Label>
+              </FormGroup>
+              <FormGroup check inline className="mt-2">
+                <Input
+                  name="groupIds"
+                  type="checkbox"
+                  onChange={validation.handleChange}
+                  value={2}
+                />
+                <Label check>Staff</Label>
+              </FormGroup>
+              <FormGroup check inline className="mt-2">
+                <Input
+                  name="groupIds"
+                  type="checkbox"
+                  onChange={validation.handleChange}
+                  value={3}
+                />
+                <Label check>User</Label>
+              </FormGroup>
+            </Col>
+          </Row>
+
           <div className="d-flex justify-content-center">
             <Button
               color="light"
               className="mx-4 px-4 py-2"
               type="button"
-              onClick={() => settog_delete()}
+              onClick={() => {
+                settog_upsert();
+                validation.resetForm();
+              }}
             >
               Đóng
             </Button>
