@@ -133,6 +133,7 @@ const UserPage = () => {
       CreateUser(data).then(() => {
         fetchUser();
       });
+      ontog_upsert();
     }
   }
 
