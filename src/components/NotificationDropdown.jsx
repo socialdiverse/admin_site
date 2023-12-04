@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Col,
   Dropdown,
@@ -20,11 +20,18 @@ import avatar8 from "../assets/images/users/avatar-8.jpg";
 import avatar3 from "../assets/images/users/avatar-3.jpg";
 import avatar6 from "../assets/images/users/avatar-6.jpg";
 import bell from "../assets/images/svg/bell.svg";
-
 //SimpleBar
 import SimpleBar from "simplebar-react";
+import SignalRConnectionManager from "../services/signalr.service";
 
 const NotificationDropdown = () => {
+  useEffect(() => {
+    const signalRConnectionManager = new SignalRConnectionManager("/chat");
+    signalRConnectionManager.connection.on("ReceiveMessage", (message) => {
+      console.log(message);
+    });
+  }, []);
+
   //Dropdown Toggle
   const [isNotificationDropdown, setIsNotificationDropdown] = useState(false);
   const toggleNotificationDropdown = () => {
@@ -38,6 +45,7 @@ const NotificationDropdown = () => {
       setActiveTab(tab);
     }
   };
+ 
   return (
     <React.Fragment>
       <Dropdown
