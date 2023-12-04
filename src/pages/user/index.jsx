@@ -34,15 +34,15 @@ const UserPage = () => {
   const [userDataGrid, setUserDataGrid] = useState([]);
   const columns = [
     "Id",
-    "FirstName",
-    "LastName",
+    "Tên",
+    "Họ",
     "Email",
-    "Gender",
-    "Mobile",
-    "Permission",
-    "IsOnline",
+    "Giới Tính",
+    "Điện thoại",
+    "Quyền",
+    "Trực tuyến",
     {
-      name: "Setting",
+      name: "Điều khiển",
       width: "200px",
       formatter: (cell, row) => {
         return _(

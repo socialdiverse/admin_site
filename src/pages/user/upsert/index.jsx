@@ -220,7 +220,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
           <Row>
             <Col md={6}>
               <Label for="avatar" className="mx-2">
-                Avatar
+                Ảnh đại diện
               </Label>
               <div className="d-flex">
                 <Input
@@ -242,7 +242,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
             </Col>
             <Col md={6}>
               <Label for="background" className="mx-2">
-                Background
+                Ảnh nền
               </Label>
               <div className="d-flex">
                 <Input
@@ -303,7 +303,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                       : false
                   }
                 />
-                <Label for="mobile">Mobile</Label>
+                <Label for="mobile">Điện thoại</Label>
                 {validation.touched.mobile && validation.errors.mobile ? (
                   <FormFeedback type="invalid">
                     {validation.errors.mobile}
@@ -329,7 +329,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                       : false
                   }
                 />
-                <Label for="email">First Name</Label>
+                <Label for="email">Tên</Label>
                 {validation.touched.firstName && validation.errors.firstName ? (
                   <FormFeedback type="invalid">
                     {validation.errors.firstName}
@@ -353,7 +353,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                       : false
                   }
                 />
-                <Label for="lastName">Last Name</Label>
+                <Label for="lastName">Họ</Label>
                 {validation.touched.lastName && validation.errors.lastName ? (
                   <FormFeedback type="invalid">
                     {validation.errors.lastName}
@@ -380,7 +380,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                       : false
                   }
                 />
-                <Label for="password">Password</Label>
+                <Label for="password">Mật khẩu</Label>
                 {validation.touched.password && validation.errors.password ? (
                   <FormFeedback type="invalid">
                     {validation.errors.password}
@@ -405,7 +405,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                       : false
                   }
                 />
-                <Label for="confirmPassword">Confirm Password</Label>
+                <Label for="confirmPassword">Xác nhận mật khẩu</Label>
                 {validation.touched.confirmPassword &&
                 validation.errors.confirmPassword ? (
                   <FormFeedback type="invalid">
@@ -428,7 +428,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                 validation.touched.bio && validation.errors.bio ? true : false
               }
             />
-            <Label for="bio">Bio</Label>
+            <Label for="bio">Mô tả ngắn</Label>
             {validation.touched.bio && validation.errors.bio ? (
               <FormFeedback type="invalid">
                 {validation.errors.bio}
@@ -537,7 +537,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                   checked={validation.values.status === 1}
                   onChange={() => validation.setFieldValue("status", 1)}
                 />
-                <Label check>Active</Label>
+                <Label check>Kích hoạt</Label>
               </FormGroup>
               <FormGroup check inline className="mt-2">
                 <Input
@@ -547,7 +547,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                   checked={validation.values.status === 0}
                   onChange={() => validation.setFieldValue("status", 0)}
                 />
-                <Label check>Inactive</Label>
+                <Label check>Chưa kích hoạt</Label>
               </FormGroup>
             </Col>
           </Row>
