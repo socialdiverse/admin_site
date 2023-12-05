@@ -13,10 +13,8 @@ class SignalRConnectionManager {
       .build();
 
     this.connection
-      .start({ transport: "longPolling", xdomain: true })
-      .then(() => {
-        console.log("chat hub connected!");
-      })
+      .start()
+      .then()
       .catch((err) => {
         console.log(err);
       }); 

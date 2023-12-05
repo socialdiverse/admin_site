@@ -27,7 +27,7 @@ import SignalRConnectionManager from "../services/signalr.service";
 const NotificationDropdown = () => {
   useEffect(() => {
     const signalRConnectionManager = new SignalRConnectionManager("/chat");
-    signalRConnectionManager.connection.on("ReceiveMessage", (message) => {
+    signalRConnectionManager.connection.on("PushNotification", (message) => {
       console.log(message);
     });
   }, []);
