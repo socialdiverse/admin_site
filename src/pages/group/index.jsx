@@ -1,28 +1,125 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MetaTags from "react-meta-tags";
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import BreadCrumb from "../../components/BreadCrumb";
+import {
+  Get as FetchGroup,
+  Update as UpdateGroup,
+  Delete as DeleteGroup,
+} from "../../services/group.service";
+import { Grid, _ } from "gridjs-react";
+import ModalUpdate from "./update";
+import ModalDelete from "./delete";
 
-import { Grid, _ } from 'gridjs-react';
-
-const data2 = [
-    ["Jonathan", "jonathan@example.com", "Senior Implementation Architect", "Hauck Inc", "Holy See"],
-    ["Harold", "harold@example.com", "Forward Creative Coordinator", "Metz Inc", "Iran"],
-    ["Shannon", "shannon@example.com", "Legacy Functionality Associate", "Zemlak Group", "South Georgia"],
-    ["Robert", "robert@example.com", "Product Accounts Technician", "Hoeger", "San Marino"],
-    ["Noel", "noel@example.com", "Customer Data Director", "Howell - Rippin", "Germany"],
-    ["Traci", "traci@example.com", "Corporate Identity Director", "Koelpin - Goldner", "Vanuatu"],
-    ["Kerry", "kerry@example.com", "Lead Applications Associate", "Feeney, Langworth and Tremblay", "Niger"],
-    ["Patsy", "patsy@example.com", "Dynamic Assurance Director", "Streich Group", "Niue"],
-    ["Cathy", "cathy@example.com", "Customer Data Director", "Ebert, Schamberger and Johnston", "Mexico"],
-    ["Tyrone", "tyrone@example.com", "Senior Response Liaison", "Raynor, Rolfson and Daugherty", "Qatar"],
-];
 const GroupPage = () => {
+  const [tog_update, settog_update] = useState(false);
+  const [tog_delete, settog_delete] = useState(false);
+
+  const [dataEdit, setDataEdit] = useState({});
+  const [dataDelete, setDataDelete] = useState({});
+  const [groups, setGroups] = useState([]);
+  const [groupDataGrid, setGroupDataGrid] = useState([]);
+
+  const onEdit = (id) => {
+    const group = groups.find((x) => x.id === id);
+    setDataEdit(group);
+    settog_update(!tog_update);
+  };
+
+  const onDelete = (id) => {
+    const group = groups.find((x) => x.id === id);
+    setDataDelete(group);
+    settog_delete(!tog_delete);
+  };
+
+  function ontog_update() {
+    settog_update(!tog_update);
+  }
+
+  function ontog_update_delete() {
+    setDataEdit({});
+    settog_update(!tog_update);
+  }
+
+  function ontog_delete() {
+    settog_delete(!tog_delete);
+  }
+
+  const columns = [
+    "Id",
+    "Tên",
+    "Slug",
+    "Thẻ tiêu đề",
+    "Tiêu đề",
+    "Trạng thái",
+    {
+      name: "Điều khiển",
+      width: "200px",
+      formatter: (cell, row) => {
+        return _(
+          <div className="d-flex">
+            <button
+              className="btn btn-sm w-xs btn-primary edit-item-btn mx-2"
+              data-bs-toggle="modal"
+              data-bs-target="#showModal"
+              onClick={() => onEdit(row.cells[0].data)}
+            >
+              Sửa
+            </button>
+            <button
+              className="btn btn-sm w-xs btn-danger remove-item-btn"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteRecordModal"
+              onClick={() => onDelete(row.cells[0].data)}
+            >
+              Xóa
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+
+  function fetchGroup() {
+    FetchGroup().then((res) => {
+      const dataGrid = res.map((u, index) => {
+        return [
+          u.id,
+          u.name || "Null",
+          u.slug || "Null",
+          u.metaTitle || "Null",
+          u.title || "Null",
+          u.status === 2 ? "Active" : "Inactive",
+        ];
+      });
+      setGroups(res);
+      setGroupDataGrid(dataGrid);
+    });
+  }
+  function handleOnUpdate(data) {
+    UpdateGroup(data).then(() => {
+      fetchGroup();
+    });
+  }
+
+  function handleOnDelete(id) {
+    if (id) {
+      DeleteGroup({ id }).then((res) => {
+        fetchGroup();
+      });
+    }
+    ontog_delete();
+  }
+
+  useEffect(() => {
+    fetchGroup();
+  }, []);
+
   return (
     <React.Fragment>
       <div className="page-content">
         <MetaTags>
-        <title>Social Diverse | Admin</title>
+          <title>Social Diverse | Admin</title>
         </MetaTags>
         <Container fluid>
           <BreadCrumb title="Quản lý nhóm" pageTitle="" />
@@ -36,14 +133,8 @@ const GroupPage = () => {
                 <CardBody>
                   <div id="table-card" className="table-card">
                     <Grid
-                      data={data2}
-                      columns={[
-                        "Name",
-                        "Email",
-                        "Position",
-                        "Company",
-                        "Country",
-                      ]}
+                      data={groupDataGrid}
+                      columns={columns}
                       sort={true}
                       search={true}
                       pagination={{ enabled: true, limit: 5 }}
@@ -53,6 +144,20 @@ const GroupPage = () => {
               </Card>
             </Col>
           </Row>
+          <ModalUpdate
+            data={dataEdit}
+            settog_update={ontog_update}
+            is_show={tog_update}
+            handleOnUpdate={handleOnUpdate}
+            setDataEdit={setDataEdit}
+          />
+          <ModalDelete
+            data={dataDelete}
+            settog_delete={ontog_delete}
+            is_show={tog_delete}
+            handleOnDelete={handleOnDelete}
+            setDataEdit={setDataEdit}
+          />
         </Container>
       </div>
     </React.Fragment>

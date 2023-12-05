@@ -109,6 +109,17 @@ class AxiosInstance {
   }
 
   /**
+   * @put method auto inject header token.
+   * @param url - { String }, payload - { String }.
+   * @param payload - { Object }.
+   * @config - { Object }.
+   * @response Promise axios patch method.
+   * */
+  put(url, payload = {}, config = {}) {
+    return this.#_axiosInstance.put(url, payload, config);
+  }
+
+  /**
    * @delete method auto inject header token.
    * @param url - { String }
    * @param payload - { Object }.
