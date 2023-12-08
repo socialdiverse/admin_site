@@ -1,4 +1,3 @@
-import React from 'react'
 import * as Yup from "yup";
 import { useFormik } from 'formik';
 import {
@@ -25,17 +24,16 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
     initialValues: {
       userId: data.userId,
       content: data.content,
-      images: data.images,
+      images: data.images || ["string"]
     },
     validationSchema: Yup.object({
       userId: Yup.number().required("Trường này không được để trống !"),
       content: Yup.string().required("Trường này không được để trống !").min(3, "Must be 3 characters or more"),
-      images: Yup.string()
+      images: Yup.array().of(Yup.string())
     }),
     onSubmit: (values) => {
-      console.log(data.id);
-
       handleOnUpsert({
+        id: data.id,
         userId: values.userId,
         content: values.content,
         images: values.images
@@ -71,45 +69,61 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
             action="#"
           >
             <Row className="mt-4">
-              <Col md={6}>
-                <Label for="userId">ID người đăng</Label>
+              {data.id && <Col md={2}>
                 <FormGroup floating>
-                  <Input name="userId" type="number" placeholder="0" onChange={validation.handleChange} onBlur={validation.handleBlur} value={validation.values.userId || ""} invalid={
-                    validation.touched.userId && validation.errors.userId ? true : false
-                  }>
+                  <Input
+                    name="postId"
+                    type="number"
+                    value={data.id || ""}
+                    disabled />
 
-                    {validation.touched.userId && validation.errors.userId ? (
-                      <FormFeedback type="invalid">
-                        {validation.errors.userId}
-                      </FormFeedback>
-                    ) : null}
-                  </Input>
+                  <Label for="postId">ID</Label>
+                </FormGroup>
+              </Col>}
+              <Col md={4}>
+                <FormGroup floating>
+                  <Input
+                    name="userId"
+                    type="number"
+                    placeholder="0"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.userId || ""}
+                    invalid={
+                      validation.touched.userId && validation.errors.userId ? true : false
+                    } />
+
+                  <Label for="userId">ID người đăng</Label>
+                  {validation.touched.userId && validation.errors.userId ? (
+                    <FormFeedback type="invalid">
+                      {validation.errors.userId}
+                    </FormFeedback>
+                  ) : null}
                 </FormGroup>
               </Col>
             </Row>
 
-            <Label for="content">Nội dung bài viết</Label>
             <FormGroup floating>
-              <textarea
+              <Input
                 id="content"
                 name="content"
-                placeholder="Nội dung bài viết"
-                type="text"
+                className="form-control"
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
                 value={validation.values.content || ""}
                 invalid={
                   validation.touched.content && validation.errors.content ? true : false
                 }
-              >
-                {validation.touched.content && validation.errors.content ? (
-                  <FormFeedback type="invalid">
-                    {validation.errors.content}
-                  </FormFeedback>
-                ) : null}
-              </textarea>
-            </FormGroup>
+                placeholder="Nội dung bài viết"
+              />
 
+              <Label for="content">Nội dung bài viết</Label>
+              {validation.touched.content && validation.errors.content ? (
+                <FormFeedback type="invalid">
+                  {validation.errors.content}
+                </FormFeedback>
+              ) : null}
+            </FormGroup>
 
             <div className="d-flex justify-content-center">
               <Button

@@ -13,79 +13,6 @@ import {
 import ModalUpsert from "./upsert";
 import ModalDelete from "./delete";
 
-const data2 = [
-  [
-    "Jonathan",
-    "jonathan@example.com",
-    "Senior Implementation Architect",
-    "Hauck Inc",
-    "Holy See",
-  ],
-  [
-    "Harold",
-    "harold@example.com",
-    "Forward Creative Coordinator",
-    "Metz Inc",
-    "Iran",
-  ],
-  [
-    "Shannon",
-    "shannon@example.com",
-    "Legacy Functionality Associate",
-    "Zemlak Group",
-    "South Georgia",
-  ],
-  [
-    "Robert",
-    "robert@example.com",
-    "Product Accounts Technician",
-    "Hoeger",
-    "San Marino",
-  ],
-  [
-    "Noel",
-    "noel@example.com",
-    "Customer Data Director",
-    "Howell - Rippin",
-    "Germany",
-  ],
-  [
-    "Traci",
-    "traci@example.com",
-    "Corporate Identity Director",
-    "Koelpin - Goldner",
-    "Vanuatu",
-  ],
-  [
-    "Kerry",
-    "kerry@example.com",
-    "Lead Applications Associate",
-    "Feeney, Langworth and Tremblay",
-    "Niger",
-  ],
-  [
-    "Patsy",
-    "patsy@example.com",
-    "Dynamic Assurance Director",
-    "Streich Group",
-    "Niue",
-  ],
-  [
-    "Cathy",
-    "cathy@example.com",
-    "Customer Data Director",
-    "Ebert, Schamberger and Johnston",
-    "Mexico",
-  ],
-  [
-    "Tyrone",
-    "tyrone@example.com",
-    "Senior Response Liaison",
-    "Raynor, Rolfson and Daugherty",
-    "Qatar",
-  ],
-];
-
 const PostPage = () => {
   const [tog_upsert, settog_upsert] = useState(false);
   const [tog_delete, settog_delete] = useState(false);
@@ -97,7 +24,7 @@ const PostPage = () => {
 
   const [posts, setPosts] = useState([]);
   const columns = [
-    "Id",
+    "ID",
     "ID người đăng",
     "Nội dung",
     "Hình ảnh",
@@ -152,11 +79,6 @@ const PostPage = () => {
     settog_upsert(!tog_upsert);
   }
 
-  function ontog_upsert_delete() {
-    setDataEdit({});
-    settog_upsert(!tog_upsert);
-  }
-
   function fetchPost() {
     FetchPost().then(res => {
       const dataGrid = res.map((p, index) => {
@@ -176,10 +98,12 @@ const PostPage = () => {
 
   function handleOnUpsert(data, isUpdate) {
     if (isUpdate) {
-      UpdatePost(data).then(() => {
+      UpdatePost(data, data.id).then(() => {
         fetchPost();
       });
-    } else {
+      ontog_upsert();
+    }
+    else {
       CreatePost(data).then(() => {
         fetchPost();
       });
@@ -187,12 +111,9 @@ const PostPage = () => {
     }
   }
 
-  // TODO fix why return 500 while delete successful
   function handleOnDelete(id) {
     if (id) {
-      console.log({ id })
-      DeletePost({ id }).then(res => {
-        console.log(res)
+      DeletePost({ id }).then(() => {
         fetchPost();
       }).catch(err => {
         console.log(err)
