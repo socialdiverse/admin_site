@@ -50,12 +50,12 @@ const RolePage = () => {
 
   function fetchRole() {
     FetchRole().then((res) => {
-      setRoles(res.result);
+      setRoles(res);
     });
   }
   function fetchPerm() {
     FetchPerm().then((res) => {
-      setPerms(res.result);
+      // setPerms(res);
     });
   }
 
@@ -71,8 +71,9 @@ const RolePage = () => {
 
   useEffect(() => {
     setSelectedRole({ value: roles[0]?.id, label: roles[0]?.title });
-    const perms = roles[0]?.permissions.map((x) => x.id);
-    setPermSelected(perms);
+
+    // const perms = JSON.parse(roles[0]?.profileType).map((x) => x.id);
+    // setPermSelected(perms);
   }, [roles]);
 
   return (
