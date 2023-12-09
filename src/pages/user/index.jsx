@@ -39,7 +39,6 @@ const UserPage = () => {
     "Email",
     "Giới Tính",
     "Điện thoại",
-    "Quyền",
     "Trực tuyến",
     {
       name: "Điều khiển",
@@ -85,24 +84,13 @@ const UserPage = () => {
     settog_upsert(!tog_upsert);
   }
 
-  function ontog_upsert_delete() {
+  function ontog_upsert_open() {
     setDataEdit({});
     settog_upsert(!tog_upsert);
   }
 
   function ontog_delete() {
     settog_delete(!tog_delete);
-  }
-
-  function getGroups(idGroups) {
-    const permArray = JSON.parse(idGroups);
-    const permMapping = {
-      1: "Admin",
-      2: "Staff",
-      3: "User",
-    };
-    const permString = permArray.map((id) => permMapping[id]).join(", ");
-    return permString;
   }
 
   function fetchUser() {
@@ -115,7 +103,6 @@ const UserPage = () => {
           u.email,
           u.gender ? "Nam" : "Nữ",
           u.mobile || "Null",
-          getGroups(u.groupIds),
           u.isOnline || "Null",
         ];
       });
@@ -171,7 +158,7 @@ const UserPage = () => {
                       <div>
                         <Button
                           color="success"
-                          onClick={() => ontog_upsert_delete()}
+                          onClick={() => ontog_upsert_open()}
                         >
                           <i className="ri-add-line align-bottom me-1"></i>Thêm
                           mới

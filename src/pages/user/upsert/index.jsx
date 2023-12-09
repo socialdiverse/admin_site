@@ -73,7 +73,6 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
       wardId: data.wardId,
       avatar: data.avatar,
       background: data.background,
-      groupIds: permOptions,
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -107,11 +106,8 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
       // wardId: Yup.number().required("Vui lòng chọn phường/xã"),
       // avatar: Yup.string(),
       // background: Yup.string(),
-      groupIds: Yup.array(),
     }),
     onSubmit: (values) => {
-      console.log(data.id);
-
       handleOnUpsert(
         {
           email: values.email,
@@ -129,7 +125,6 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
           wardId: values.wardId,
           avatar: values.avatar,
           background: values.background,
-          groupIds: `[${values.groupIds.join(" , ")}]`,
         },
         data.id ? true : false
       );
@@ -548,37 +543,6 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                   onChange={() => validation.setFieldValue("status", 0)}
                 />
                 <Label check>Chưa kích hoạt</Label>
-              </FormGroup>
-            </Col>
-          </Row>
-          <Row className="mt-2 ">
-            <Col sm={12} className="d-flex justify-content-center mb-4">
-              <FormGroup check inline className="mt-2">
-                <Input
-                  name="groupIds"
-                  type="checkbox"
-                  onChange={validation.handleChange}
-                  value={1}
-                />
-                <Label check>Admin</Label>
-              </FormGroup>
-              <FormGroup check inline className="mt-2">
-                <Input
-                  name="groupIds"
-                  type="checkbox"
-                  onChange={validation.handleChange}
-                  value={2}
-                />
-                <Label check>Staff</Label>
-              </FormGroup>
-              <FormGroup check inline className="mt-2">
-                <Input
-                  name="groupIds"
-                  type="checkbox"
-                  onChange={validation.handleChange}
-                  value={3}
-                />
-                <Label check>User</Label>
               </FormGroup>
             </Col>
           </Row>

@@ -13,7 +13,7 @@ import "react-dual-listbox/lib/react-dual-listbox.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-const ModalUpdate = ({ data, isShow, tog_create, handleOnCreate }) => {
+const ModalUpsert = ({ data, ontog_upsert, is_show, handleOnUpsert }) => {
   const validation = useFormik({
     enableReinitialize: true,
 
@@ -25,26 +25,28 @@ const ModalUpdate = ({ data, isShow, tog_create, handleOnCreate }) => {
       title: Yup.string().required("Trường này không được để trống !"),
     }),
     onSubmit: (values) => {
-      handleOnCreate(values);
+      handleOnUpsert(values);
     },
   });
 
   return (
     <Modal
       id="myModal"
-      isOpen={isShow}
+      isOpen={is_show}
       toggle={() => {
-        tog_create();
+        ontog_upsert();
+        validation.resetForm();
       }}
     >
       <ModalHeader
         className="modal-title"
         id="myModalLabel"
         toggle={() => {
-          tog_create();
+          ontog_upsert();
+          validation.resetForm();
         }}
       >
-        Thêm vai trò
+        {data.id ? "Cập nhật vai trò" : "Thêm vai trò"}
       </ModalHeader>
       <ModalBody>
         <form
@@ -108,4 +110,4 @@ const ModalUpdate = ({ data, isShow, tog_create, handleOnCreate }) => {
   );
 };
 
-export default ModalUpdate;
+export default ModalUpsert;
