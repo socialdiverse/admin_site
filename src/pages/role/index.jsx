@@ -13,56 +13,105 @@ import {
 import Select from "react-select";
 import BreadCrumb from "../../components/BreadCrumb";
 import DualListBox from "react-dual-listbox";
-import ModalUpdate from "./update";
 import { useEffect } from "react";
-import { Get as FetchRole } from "../../services/role.service";
 import { Get as FetchPerm } from "../../services/permission.service";
-
+import {
+  Get as FetchRole,
+  Update as UpdateRole,
+  Delete as DeleteRole,
+  Create as CreateRole,
+  UpdateRolePerms,
+} from "../../services/role.service";
 import "react-dual-listbox/lib/react-dual-listbox.css";
 import { ROLE_DEFAULT } from "../../helpers/constants/global.variable";
+import ModalUpsert from "./upsert";
+import ModalDelete from "./delete";
 
 const RolePage = () => {
   const [selectedRole, setSelectedRole] = useState(null);
-  const [permSelected, setPermSelected] = useState([""]);
-  const [modal_create, setmodal_create] = useState(false);
-  const [dataUpdate, setDataUpdate] = useState({});
+  const [permSelected, setPermSelected] = useState([]);
+
+  const [dataEdit, setDataEdit] = useState({});
+  const [dataDelete, setDataDelete] = useState({});
+
   const [roles, setRoles] = useState([]);
   const [perms, setPerms] = useState([]);
+  const [tog_upsert, settog_upsert] = useState(false);
+  const [tog_delete, settog_delete] = useState(false);
 
-  function tog_create() {
-    setmodal_create(!modal_create);
+  const onEdit = (id) => {
+    const role = roles.find((x) => x.id === id);
+    setDataEdit(role);
+    settog_upsert(!tog_upsert);
+  };
+
+  const onDelete = (id) => {
+    const role = roles.find((x) => x.id === id);
+    setDataDelete(role);
+    settog_delete(!tog_delete);
+  };
+
+  function ontog_upsert() {
+    settog_upsert(!tog_upsert);
   }
 
-  function tog_update(id) {
-    if (id) {
-      const role = roles.find((x) => x.id === id);
-      setDataUpdate(role);
-    }
-    setmodal_create(!modal_create);
+  function ontog_upsert_open() {
+    setDataEdit({});
+    settog_upsert(!tog_upsert);
+  }
+
+  function ontog_delete() {
+    settog_delete(!tog_delete);
   }
 
   function handleSelectRole(selectedRole) {
     const role = roles.find((x) => x.id === selectedRole.value);
-    const perms = role.permissions.map((x) => x.id);
-    setPermSelected(perms);
-    setSelectedRole(selectedRole);
+    setSelectedRole({ value: role.id, label: role.title, perms: role.perms });
+    setPermSelected(role.perms.map((p) => p.title));
   }
 
   function fetchRole() {
     FetchRole().then((res) => {
-      setRoles(res.result);
+      setRoles(res);
     });
   }
   function fetchPerm() {
     FetchPerm().then((res) => {
-      setPerms(res.result);
+      const perms = res.filter((p) => p.profileTypes !== "[]");
+      setPerms(perms);
     });
   }
 
-  function onCreateRole(value) {
-    // eslint-disable-next-line no-debugger
-    debugger;
+  function handleOnDelete(id) {
+    if (id) {
+      DeleteRole({ id }).then((res) => {
+        fetchRole();
+      });
+    }
+    ontog_delete();
   }
+
+  function handleOnUpsert(data, isUpdate) {
+    if (isUpdate) {
+      UpdateRole(data).then(() => {
+        fetchRole();
+      });
+    } else {
+      CreateRole(data).then(() => {
+        fetchRole();
+      });
+      ontog_upsert();
+    }
+  }
+
+  const submitNewPerm = async () => {
+    const ids = perms
+      .filter((item) => permSelected.includes(item.title))
+      .map((item) => item.id);
+    try {
+      await UpdateRolePerms({ roleId: selectedRole.value, permIds: ids });
+    } catch (error) {}
+  };
 
   useEffect(() => {
     fetchRole();
@@ -71,8 +120,10 @@ const RolePage = () => {
 
   useEffect(() => {
     setSelectedRole({ value: roles[0]?.id, label: roles[0]?.title });
-    const perms = roles[0]?.permissions.map((x) => x.id);
-    setPermSelected(perms);
+    const perms = roles[0]?.perms;
+    if (roles.length > 1) {
+      setPermSelected(perms.map((p) => p.title));
+    }
   }, [roles]);
 
   return (
@@ -93,7 +144,10 @@ const RolePage = () => {
                   <Row className="g-4 mb-3">
                     <Col className="col-sm-auto">
                       <div>
-                        <Button color="success" onClick={() => tog_create()}>
+                        <Button
+                          color="success"
+                          onClick={() => ontog_upsert_open()}
+                        >
                           <i className="ri-add-line align-bottom me-1"></i>Thêm
                           mới
                         </Button>
@@ -122,11 +176,14 @@ const RolePage = () => {
                                   <div className="d-flex gap-2">
                                     <button
                                       className="btn btn-sm w-xs btn-primary"
-                                      onClick={() => tog_update(item.id)}
+                                      onClick={() => onEdit(item.id)}
                                     >
                                       Sửa
                                     </button>
-                                    <button className="btn btn-sm w-xs btn-danger">
+                                    <button
+                                      className="btn btn-sm w-xs btn-danger"
+                                      onClick={() => onDelete(item.id)}
+                                    >
                                       Xóa
                                     </button>
                                   </div>
@@ -140,12 +197,16 @@ const RolePage = () => {
                   </div>
                 </CardBody>
               </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={10}>
               <Card>
                 <CardHeader>
                   <h4 className="card-title mb-0">Phân quyền vai trò</h4>
                 </CardHeader>
                 <CardBody>
-                  <Col lg={8}>
+                  <Col className="col-sm-auto">
                     <Select
                       value={selectedRole}
                       onChange={(item) => {
@@ -159,24 +220,34 @@ const RolePage = () => {
                     {perms && (
                       <DualListBox
                         options={perms.map((p) => {
-                          return { value: p.id, label: p.title };
+                          return { value: p.title, label: p.title };
                         })}
                         selected={permSelected}
-                        onChange={(value) => setPermSelected(value)}
+                        onChange={(value) => {
+                          setPermSelected(value);
+                        }}
                       />
                     )}
                   </Col>
                   <br />
-                  <Button color="success">Lưu lại </Button>
+                  <Button onClick={submitNewPerm} color="success">
+                    Lưu lại
+                  </Button>
                 </CardBody>
               </Card>
             </Col>
           </Row>
-          <ModalUpdate
-            isShow={modal_create}
-            tog_create={tog_create}
-            handleOnCreate={onCreateRole}
-            data={dataUpdate}
+          <ModalUpsert
+            data={dataEdit}
+            ontog_upsert={ontog_upsert}
+            is_show={tog_upsert}
+            handleOnUpsert={handleOnUpsert}
+          />
+          <ModalDelete
+            data={dataDelete}
+            settog_delete={ontog_delete}
+            is_show={tog_delete}
+            handleOnDelete={handleOnDelete}
           />
         </Container>
       </div>
