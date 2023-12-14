@@ -51,47 +51,47 @@ const RolePage = () => {
     settog_delete(!tog_delete);
   };
 
-  function ontog_upsert() {
+  const ontog_upsert = () => {
     settog_upsert(!tog_upsert);
-  }
+  };
 
-  function ontog_upsert_open() {
+  const ontog_upsert_open = () => {
     setDataEdit({});
     settog_upsert(!tog_upsert);
-  }
+  };
 
-  function ontog_delete() {
+  const ontog_delete = () => {
     settog_delete(!tog_delete);
-  }
+  };
 
-  function handleSelectRole(selectedRole) {
+  const handleSelectRole = (selectedRole) => {
     const role = roles.find((x) => x.id === selectedRole.value);
     setSelectedRole({ value: role.id, label: role.title, perms: role.perms });
     setPermSelected(role.perms.map((p) => p.title));
-  }
+  };
 
-  function fetchRole() {
+  const fetchRole = () => {
     FetchRole().then((res) => {
       setRoles(res);
     });
-  }
-  function fetchPerm() {
+  };
+  const fetchPerm = () => {
     FetchPerm().then((res) => {
       const perms = res.filter((p) => p.profileTypes !== "[]");
       setPerms(perms);
     });
-  }
+  };
 
-  function handleOnDelete(id) {
+  const handleOnDelete = (id) => {
     if (id) {
       DeleteRole({ id }).then((res) => {
         fetchRole();
       });
     }
     ontog_delete();
-  }
+  };
 
-  function handleOnUpsert(data, isUpdate) {
+  const handleOnUpsert = (data, isUpdate) => {
     if (isUpdate) {
       UpdateRole(data).then(() => {
         fetchRole();
@@ -102,7 +102,7 @@ const RolePage = () => {
       });
       ontog_upsert();
     }
-  }
+  };
 
   const submitNewPerm = async () => {
     const ids = perms

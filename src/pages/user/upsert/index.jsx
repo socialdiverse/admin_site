@@ -19,11 +19,11 @@ import ReactDatePicker from "../../../components/DatePicker";
 import { FaCalendarAlt } from "react-icons/fa";
 import { Get as FetchLocation } from "../../../services/location.service";
 import { PostFile } from "../../../services/file.service";
+import { Get as FetchRole } from "../../../services/role.service";
 const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
-  const [permOptions, setPermOptions] = useState(
-    data.groupIds ? JSON.parse(data.groupIds) : []
-  );
+  const [permOptions, setPermOptions] = useState(data.roles ? data.roles : []);
   const [addressData, setAddressData] = useState();
+  const [roles, setRoles] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState();
@@ -66,13 +66,14 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
       confirmPassword: "",
       gender: data.gender || false,
       relationship: data.relationship || false,
-      status: data.status || false,
+      status: data.status,
       dob: convertDobIntToDate(data.dob),
       provinceId: data.provinceId,
       districtId: data.districtId,
       wardId: data.wardId,
       avatar: data.avatar,
       background: data.background,
+      roles: data.roles ? data.roles.map((role) => role.id) : [],
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -125,11 +126,36 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
           wardId: values.wardId,
           avatar: values.avatar,
           background: values.background,
+          roleIds: values.roles,
         },
         data.id ? true : false
       );
     },
   });
+
+  const handleCheckboxChange = (event, roleId) => {
+    const isChecked = event.target.checked;
+
+    validation.setValues((prevValues) => {
+      const rolesArray = [...prevValues.roles];
+
+      // Nếu checkbox được chọn và id không tồn tại trong mảng, thêm vào mảng
+      if (isChecked && !rolesArray.includes(roleId)) {
+        rolesArray.push(roleId);
+      }
+
+      // Nếu checkbox không được chọn và id tồn tại trong mảng, loại bỏ khỏi mảng
+      if (!isChecked && rolesArray.includes(roleId)) {
+        const index = rolesArray.indexOf(roleId);
+        rolesArray.splice(index, 1);
+      }
+
+      return {
+        ...prevValues,
+        roles: rolesArray,
+      };
+    });
+  };
 
   const uploadImage = (isAvatar) => {
     if (isAvatar) {
@@ -180,6 +206,9 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
       setProvinces(res.address.provinces);
       setDistricts(res.address.districts);
       setWards(res.address.wards);
+      FetchRole().then((res) => {
+        setRoles(res);
+      });
     });
   }, []);
 
@@ -262,6 +291,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
             <Col md={6}>
               <FormGroup floating>
                 <Input
+                  readOnly={data.id ? true : false}
                   name="email"
                   placeholder="Email"
                   type="email"
@@ -544,6 +574,22 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                 />
                 <Label check>Chưa kích hoạt</Label>
               </FormGroup>
+            </Col>
+          </Row>
+          <Row className="mt-2 ">
+            <Col sm={12} className="d-flex justify-content-center mb-4">
+              {roles.map((role, i) => (
+                <FormGroup check inline className="mt-2" key={i}>
+                  <Input
+                    name="roles"
+                    type="checkbox"
+                    checked={validation.values.roles.includes(role.id)}
+                    onChange={(e) => handleCheckboxChange(e, role.id)}
+                    value={role.id}
+                  />
+                  <Label check>{role.title}</Label>
+                </FormGroup>
+              ))}
             </Col>
           </Row>
 

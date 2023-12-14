@@ -34,11 +34,11 @@ const UserPage = () => {
   const [userDataGrid, setUserDataGrid] = useState([]);
   const columns = [
     "Id",
-    "Tên",
-    "Họ",
+    "Họ Tên",
     "Email",
     "Giới Tính",
     "Điện thoại",
+    "Quyền",
     "Trực tuyến",
     {
       name: "Điều khiển",
@@ -98,11 +98,11 @@ const UserPage = () => {
       const dataGrid = res.map((u, index) => {
         return [
           u.id,
-          u.firstName || "Null",
-          u.lastName || "Null",
+          u.firstName + " " + u.lastName || null,
           u.email,
           u.gender ? "Nam" : "Nữ",
           u.mobile || "Null",
+          u.roles.map((role) => role.title).join(", "),
           u.isOnline || "Null",
         ];
       });
@@ -120,8 +120,8 @@ const UserPage = () => {
       CreateUser(data).then(() => {
         fetchUser();
       });
-      ontog_upsert();
     }
+    ontog_upsert();
   }
 
   function handleOnDelete(id) {
