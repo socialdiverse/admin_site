@@ -1,19 +1,8 @@
 import React from "react";
 import MetaTags from "react-meta-tags";
-import {
-  Card,
-  CardBody,
-  Col,
-  Container,
-  Input,
-  Label,
-  Row,
-  Button,
-  Form,
-  FormFeedback,
-} from "reactstrap";
+import { Button, Card, CardBody, Col, Container, Form, FormFeedback, Input, Label, Row, } from "reactstrap";
 
-import { withRouter, Link } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 
 // Formik validation
 import * as Yup from "yup";
@@ -21,7 +10,6 @@ import { useFormik } from "formik";
 
 import logoLight from "../../assets/images/logo-light.png";
 import { Login as OnLogin } from "../../services/auth.service";
-import { useHistory } from "react-router-dom";
 import { ACCESS_TOKEN, CURRENT_USER, REFRESH_TOKEN } from "../../helpers/constants/global.variable";
 
 const Login = (props) => {
@@ -38,8 +26,9 @@ const Login = (props) => {
       password: Yup.string().required("Please Enter Your Password"),
     }),
     onSubmit: (values) => {
+      console.log('===values',values)
       OnLogin(values).then((res) => {
-        if (res) { 
+        if (res) {
           localStorage.setItem(ACCESS_TOKEN, JSON.stringify(res.accessToken));
           localStorage.setItem(REFRESH_TOKEN, JSON.stringify(res.refreshToken));
           localStorage.setItem(CURRENT_USER, JSON.stringify(res.user));

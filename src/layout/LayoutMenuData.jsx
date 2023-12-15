@@ -53,6 +53,16 @@ const Navdata = () => {
       },
     },
     {
+      id: "comments",
+      label: "Quản lý bình luận",
+      icon: "ri-honour-line",
+      link: "/comments",
+      click: function (e) {
+        e.preventDefault();
+        setIscurrentState("Comments");
+      },
+    },
+    {
       id: "groups",
       label: "Quản lý nhóm",
       icon: "ri-honour-line",

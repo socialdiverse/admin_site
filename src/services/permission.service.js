@@ -1,8 +1,8 @@
-import { APIClient } from '../helpers/api_helper';
-const baseUrl = `perms`;
-const api = new APIClient();
+import { apiClient } from '../helpers/api_helper';
 
-export const Get = (params) => api.get(baseUrl, params);
-export const Create = (params) => api.create(baseUrl, params);
-export const Update = (params) => api.update(baseUrl, params);
-export const Delete = (params) => api.delete(baseUrl, params);
+const baseUrl = `perms`;
+
+export const Get = (params) => apiClient.fetch(baseUrl, params);
+export const Create = (params) => apiClient.post(baseUrl, params);
+export const Update = (params) => apiClient.put(baseUrl, params);
+export const Delete = (params) => apiClient.post(baseUrl, params);

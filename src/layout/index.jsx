@@ -12,6 +12,7 @@ import { changeLayout, changeSidebarTheme } from "../store/actions";
 
 //redux
 import { useSelector, useDispatch } from "react-redux";
+import SignalRConnectionManager from "../services/signalr.service";
 
 const Layout = (props) => {
   const [headerClass, setHeaderClass] = useState("");
@@ -29,6 +30,8 @@ const Layout = (props) => {
       dispatch(changeSidebarTheme(leftSidebarType));
       dispatch(changeLayout(layoutType));
     }
+    // new SignalRConnectionManager("/chat");
+    // // SignalRConnection("/notification");
   }, [layoutType, leftSidebarType, dispatch]);
 
   // class add remove in header

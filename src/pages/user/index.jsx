@@ -16,22 +16,33 @@ import { useEffect } from "react";
 import {
   Get as FetchUser,
   Update as UpdateUser,
+  Delete as DeleteUser,
   Create as CreateUser,
 } from "../../services/user.service";
 import { useState } from "react";
-import ModalUpdate from "./update";
+import ModalDelete from "./delete";
+import ModalUpsert from "./upsert";
 
 const UserPage = () => {
-  const [tog_update, settog_update] = useState(false);
+  const [tog_upsert, settog_upsert] = useState(false);
+  const [tog_delete, settog_delete] = useState(false);
+
   const [dataEdit, setDataEdit] = useState({});
+  const [dataDelete, setDataDelete] = useState({});
+
   const [users, setUsers] = useState([]);
   const [userDataGrid, setUserDataGrid] = useState([]);
   const columns = [
     "Id",
-    "Name",
+    "Tên",
+    "Họ",
     "Email",
+    "Giới Tính",
+    "Điện thoại",
+    "Quyền",
+    "Trực tuyến",
     {
-      name: "",
+      name: "Điều khiển",
       width: "200px",
       formatter: (cell, row) => {
         return _(
@@ -61,45 +72,80 @@ const UserPage = () => {
   const onEdit = (id) => {
     const user = users.find((x) => x.id === id);
     setDataEdit(user);
-    settog_update(!tog_update);
+    settog_upsert(!tog_upsert);
   };
 
   const onDelete = (id) => {
-    alert(id);
+    const user = users.find((x) => x.id === id);
+    setDataDelete(user);
+    settog_delete(!tog_delete);
   };
 
-  function ontog_update() {
-    settog_update(!tog_update);
+  function ontog_upsert() {
+    settog_upsert(!tog_upsert);
+  }
+
+  function ontog_upsert_delete() {
+    setDataEdit({});
+    settog_upsert(!tog_upsert);
+  }
+
+  function ontog_delete() {
+    settog_delete(!tog_delete);
+  }
+
+  function getGroups(idGroups) {
+    const permArray = JSON.parse(idGroups);
+    const permMapping = {
+      1: "Admin",
+      2: "Staff",
+      3: "User",
+    };
+    const permString = permArray.map((id) => permMapping[id]).join(", ");
+    return permString;
   }
 
   function fetchUser() {
     FetchUser().then((res) => {
       const dataGrid = res.map((u, index) => {
-        return [index + 1, u.firstName + " " + u.lastName, u.email];
+        return [
+          u.id,
+          u.firstName || "Null",
+          u.lastName || "Null",
+          u.email,
+          u.gender ? "Nam" : "Nữ",
+          u.mobile || "Null",
+          getGroups(u.groupIds),
+          u.isOnline || "Null",
+        ];
       });
       setUsers(res);
       setUserDataGrid(dataGrid);
     });
   }
 
-  function handleOnUpdate(dataUpdate) {
-    if (dataUpdate.id) {
-      UpdateUser(dataUpdate).then((res) => {
-        setUsers([...users, res]);
+  function handleOnUpsert(data, isUpdate) {
+    if (isUpdate) {
+      UpdateUser(data).then(() => {
+        fetchUser();
       });
     } else {
-      CreateUser(dataUpdate).then((res) => {
-        const newUsers = users.map((u) => {
-          if (u.id === res.id) {
-            return res;
-          }
-          return u;
-        });
-        setUsers(newUsers);
+      CreateUser(data).then(() => {
+        fetchUser();
       });
+      ontog_upsert();
     }
   }
-   
+
+  function handleOnDelete(id) {
+    if (id) {
+      DeleteUser({ id }).then((res) => {
+        fetchUser();
+      });
+    }
+    ontog_delete();
+  }
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -123,7 +169,10 @@ const UserPage = () => {
                   <Row className="g-4 mb-3">
                     <Col className="col-sm-auto">
                       <div>
-                        <Button color="success" onClick={() => ontog_update()}>
+                        <Button
+                          color="success"
+                          onClick={() => ontog_upsert_delete()}
+                        >
                           <i className="ri-add-line align-bottom me-1"></i>Thêm
                           mới
                         </Button>
@@ -143,11 +192,18 @@ const UserPage = () => {
               </Card>
             </Col>
           </Row>
-          <ModalUpdate
+          <ModalUpsert
             data={dataEdit}
-            settog_update={ontog_update}
-            is_show={tog_update}
-            handleOnUpdate={handleOnUpdate}
+            settog_upsert={ontog_upsert}
+            is_show={tog_upsert}
+            handleOnUpsert={handleOnUpsert}
+            setDataEdit={setDataEdit}
+          />
+          <ModalDelete
+            data={dataDelete}
+            settog_delete={ontog_delete}
+            is_show={tog_delete}
+            handleOnDelete={handleOnDelete}
           />
         </Container>
       </div>

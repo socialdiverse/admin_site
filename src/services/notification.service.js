@@ -1,5 +1,5 @@
-import { APIClient } from '../helpers/api_helper';
-const baseUrl = `notifications`;
-const api = new APIClient();
+import { apiClient } from '../helpers/api_helper';
 
-export const GetAll = (params) => api.get(baseUrl, params);
+const baseUrl = `notifications`;
+
+export const GetAll = (params) => apiClient.fetch(baseUrl, params);

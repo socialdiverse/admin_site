@@ -8,12 +8,14 @@ import UserPage from "../pages/user";
 import GroupPage from "../pages/group";
 import RolePage from "../pages/role";
 import PostPage from "../pages/post";
+import CommentPage from "../pages/comment";
 
 const authProtectedRoutes = [
   { path: "/users", component: UserPage },
   { path: "/groups", component: GroupPage },
   { path: "/posts", component: PostPage },
   { path: "/roles", component: RolePage },
+  { path: "/comments", component: CommentPage },
   {
     path: "/",
     exact: true,

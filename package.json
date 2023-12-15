@@ -2,13 +2,28 @@
   "name": "velzon-react",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write \"**/*.{js,jsx,json,md,html,css,less,scss}\"",
+    "postinstall": "patch-package"
+  },
   "dependencies": {
+    "@aspnet/signalr": "^1.0.27",
     "@ckeditor/ckeditor5-build-classic": "^32.0.0",
     "@ckeditor/ckeditor5-react": "^6.0.0",
     "@ckeditor/ckeditor5-upload": "^37.0.1",
+    "@emotion/babel-plugin": "^11.11.0",
+    "@microsoft/signalr": "^8.0.0",
+    "@popperjs/core": "^2.11.8",
+    "@vitejs/plugin-react-swc": "^3.5.0",
     "axios": "^0.26.0",
     "axios-mock-adapter": "^1.21.4",
-    "bootstrap": "^5.1.3",
+    "bootstrap": "^5.3.2",
     "env-cmd": "^10.1.0",
     "eslint": "^8.9.0",
     "feather-icons-react": "^0.5.0",
@@ -16,38 +31,36 @@
     "gridjs": "^5.0.2",
     "gridjs-react": "^5.0.2",
     "moment": "^2.29.4",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prismjs": "^1.26.0",
     "query-string": "^8.1.0",
     "react": "^17.0.2",
     "react-countup": "^6.1.1",
+    "react-datepicker": "^4.24.0",
     "react-dom": "^17.0.2",
     "react-dual-listbox": "^5.0.2",
     "react-flatpickr": "^3.10.13",
+    "react-icons": "^4.12.0",
+    "react-images-upload": "^1.2.8",
     "react-meta-tags": "^1.0.1",
     "react-redux": "^8.1.3",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "5.0.0",
     "react-select": "^5.7.0",
     "react-table": "^7.7.0",
     "react-toastify": "^9.1.2",
     "reactstrap": "^9.0.1",
     "recoil": "^0.7.6",
     "redux-saga": "^1.2.3",
-    "sass": "^1.69.5",
     "simplebar-react": "^2.3.6",
     "socket.io-client": "^4.6.1",
     "swiper": "^8.0.6",
+    "vite": "^5.0.3",
+    "vite-plugin-sass-glob-import": "^3.0.2",
+    "vite-plugin-svgr": "^4.2.0",
+    "vite-tsconfig-paths": "^4.2.1",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build --max_old_space_size=8000 build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix .",
-    "format": "prettier --write \"**/*.{js,jsx,json,md,html,css,less,scss}\""
   },
   "babelOptions": {
     "presets": [
@@ -57,8 +70,7 @@
   "eslintConfig": {
     "extends": [
       "eslint:recommended",
-      "plugin:react/recommended",
-      "react-app"
+      "plugin:react/recommended"
     ],
     "parser": "@babel/eslint-parser",
     "parserOptions": {
@@ -106,6 +118,12 @@
     "moment": "2.29.1"
   },
   "devDependencies": {
-    "babel-plugin-prismjs": "^2.1.0"
+    "@types/react-dom": "^18.2.17",
+    "@types/react-router-dom": "^5.3.3",
+    "@vitest/coverage-v8": "^0.34.6",
+    "babel-plugin-prismjs": "^2.1.0",
+    "jsdom": "^23.0.0",
+    "sass": "^1.69.5",
+    "vitest": "^0.34.6"
   }
 }
