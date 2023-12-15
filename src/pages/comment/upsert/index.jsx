@@ -24,11 +24,13 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
     initialValues: {
       userId: data.userId,
       content: data.content,
+      link: data.link,
       images: data.images || ["string"]
     },
     validationSchema: Yup.object({
       userId: Yup.number().required("Trường này không được để trống !"),
       content: Yup.string().required("Trường này không được để trống !"),
+      link: Yup.string(),
       images: Yup.array().of(Yup.string())
     }),
     onSubmit: (values) => {
@@ -36,6 +38,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
         id: data.id,
         userId: values.userId,
         content: values.content,
+        link: values.link,
         images: values.images
       },
         data.id ? true : false
@@ -58,7 +61,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
             settog_upsert();
             validation.resetForm();
           }}>
-          {data.id ? "Cập nhật bài viết" : "Thêm bài viết"}
+          {data.id ? "Cập nhật bình luận" : "Thêm bình luận"}
         </ModalHeader>
         <ModalBody>
           <Form onSubmit={e => {
@@ -114,13 +117,35 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                 invalid={
                   validation.touched.content && validation.errors.content ? true : false
                 }
-                placeholder="Nội dung bài viết"
+                placeholder="Nội dung bình luận"
               />
 
-              <Label for="content">Nội dung bài viết</Label>
+              <Label for="content">Nội dung bình luận</Label>
               {validation.touched.content && validation.errors.content ? (
                 <FormFeedback type="invalid">
                   {validation.errors.content}
+                </FormFeedback>
+              ) : null}
+            </FormGroup>
+
+            <FormGroup floating>
+              <Input
+                id="link"
+                name="link"
+                className="form-control"
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                value={validation.values.link || ""}
+                invalid={
+                  validation.touched.link && validation.errors.link ? true : false
+                }
+                placeholder="Link đính kèm"
+              />
+
+              <Label for="link">Link đính kèm</Label>
+              {validation.touched.link && validation.errors.link ? (
+                <FormFeedback type="invalid">
+                  {validation.errors.link}
                 </FormFeedback>
               ) : null}
             </FormGroup>

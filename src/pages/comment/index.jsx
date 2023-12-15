@@ -5,15 +5,15 @@ import BreadCrumb from "../../components/BreadCrumb";
 
 import { Grid, _ } from "gridjs-react";
 import {
-  Get as FetchPost,
-  Update as UpdatePost,
-  Delete as DeletePost,
-  Create as CreatePost
-} from "../../services/post.service"
+  Get as FetchComment,
+  Update as UpdateComment,
+  Delete as DeleteComment,
+  Create as CreateComment
+} from "../../services/comment.service"
 import ModalUpsert from "./upsert";
 import ModalDelete from "./delete";
 
-const PostPage = () => {
+const CommentPage = () => {
   const [tog_upsert, settog_upsert] = useState(false);
   const [tog_delete, settog_delete] = useState(false);
 
@@ -26,11 +26,11 @@ const PostPage = () => {
   const columns = [
     "ID",
     "ID người đăng",
-    "Loại bài viết",
+    "Loại bình luận",
     "Nội dung",
     "Hình ảnh",
-    "Likes",
-    "Comments",
+    "Ngày tạo",
+    "Ngày cập nhật cuối",
     {
       name: "Điều khiển",
       width: "200px",
@@ -80,8 +80,8 @@ const PostPage = () => {
     settog_upsert(!tog_upsert);
   }
 
-  function fetchPost() {
-    FetchPost().then(res => {
+  function fetchComment() {
+    FetchComment().then(res => {
       const dataGrid = res.map((p, index) => {
         console.log(p)
         return [
@@ -90,8 +90,8 @@ const PostPage = () => {
           p.type,
           p.content || "Null",
           p.images || "Null",
-          p.likes || "Null",
-          p.comments || "Null",
+          p.createdAt || "Null",
+          p.updatedAt || "Null",
         ]
       });
       setPosts(res);
@@ -101,14 +101,14 @@ const PostPage = () => {
 
   function handleOnUpsert(data, isUpdate) {
     if (isUpdate) {
-      UpdatePost(data, data.id).then(() => {
-        fetchPost();
+      UpdateComment(data, data.id).then(() => {
+        fetchComment();
       });
       ontog_upsert();
     }
     else {
-      CreatePost(data).then(() => {
-        fetchPost();
+      CreateComment(data).then(() => {
+        fetchComment();
       });
       ontog_upsert();
     }
@@ -116,8 +116,8 @@ const PostPage = () => {
 
   function handleOnDelete(id) {
     if (id) {
-      DeletePost({ id }).then(() => {
-        fetchPost();
+      DeleteComment({ id }).then(() => {
+        fetchComment();
       }).catch(err => {
         console.log(err)
       });
@@ -126,7 +126,7 @@ const PostPage = () => {
   }
 
   useEffect(() => {
-    fetchPost();
+    fetchComment();
   }, []);
 
   return (
@@ -136,12 +136,12 @@ const PostPage = () => {
           <title>Social Diverse | Admin</title>
         </MetaTags>
         <Container fluid>
-          <BreadCrumb title="Quản lý bài viết" pageTitle="" />
+          <BreadCrumb title="Quản lý bình luận" pageTitle="" />
           <Row>
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Quản lý bài viết</h4>
+                  <h4 className="card-title mb-0">Quản lý bình luận</h4>
                 </CardHeader>
 
                 <CardBody>
@@ -189,4 +189,4 @@ const PostPage = () => {
   );
 };
 
-export default PostPage;
+export default CommentPage;
