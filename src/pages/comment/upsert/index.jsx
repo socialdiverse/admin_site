@@ -23,12 +23,14 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
 
     initialValues: {
       userId: data.userId,
+      postId: data.postId,
       content: data.content,
       link: data.link,
       images: data.images || ["string"]
     },
     validationSchema: Yup.object({
       userId: Yup.number().required("Trường này không được để trống !"),
+      postId: Yup.number().required("Trường này không được để trống !"),
       content: Yup.string().required("Trường này không được để trống !"),
       link: Yup.string(),
       images: Yup.array().of(Yup.string())
@@ -37,6 +39,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
       handleOnUpsert({
         id: data.id,
         userId: values.userId,
+        postId: values.postId,
         content: values.content,
         link: values.link,
         images: values.images
@@ -100,6 +103,27 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                   {validation.touched.userId && validation.errors.userId ? (
                     <FormFeedback type="invalid">
                       {validation.errors.userId}
+                    </FormFeedback>
+                  ) : null}
+                </FormGroup>
+              </Col>
+              <Col md={4}>
+                <FormGroup floating>
+                  <Input
+                    name="postId"
+                    type="number"
+                    placeholder="0"
+                    onChange={validation.handleChange}
+                    onBlur={validation.handleBlur}
+                    value={validation.values.postId || ""}
+                    invalid={
+                      validation.touched.postId && validation.errors.postId ? true : false
+                    } />
+
+                  <Label for="postId">ID bài viết</Label>
+                  {validation.touched.postId && validation.errors.postId ? (
+                    <FormFeedback type="invalid">
+                      {validation.errors.postId}
                     </FormFeedback>
                   ) : null}
                 </FormGroup>

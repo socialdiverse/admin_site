@@ -98,7 +98,7 @@ const ModalUpsert = ({ data, settog_upsert, is_show, handleOnUpsert }) => {
                     <FormFeedback type="invalid">
                       {validation.errors.userId}
                     </FormFeedback>
-                  ) : null}
+                  ) : null}                  
                 </FormGroup>
               </Col>
             </Row>

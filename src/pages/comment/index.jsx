@@ -26,13 +26,14 @@ const CommentPage = () => {
   const columns = [
     "ID",
     "ID người đăng",
+    "ID bài viết",
     "Loại bình luận",
     "Nội dung",
     "Hình ảnh",
     "Ngày tạo",
     "Ngày cập nhật cuối",
     {
-      name: "Điều khiển",
+      name: "Hành động",
       width: "200px",
       formatter: (cell, row) => {
         return _(
@@ -83,10 +84,10 @@ const CommentPage = () => {
   function fetchComment() {
     FetchComment().then(res => {
       const dataGrid = res.map((p, index) => {
-        console.log(p)
         return [
           p.id,
           p.userId,
+          p.postId,
           p.type,
           p.content || "Null",
           p.images || "Null",

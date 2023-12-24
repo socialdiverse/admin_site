@@ -31,6 +31,8 @@ const PostPage = () => {
     "Hình ảnh",
     "Likes",
     "Comments",
+    "Ngày tạo",
+    "Cập nhật lần cuối",
     {
       name: "Điều khiển",
       width: "200px",
@@ -92,6 +94,8 @@ const PostPage = () => {
           p.images || "Null",
           p.likes || "Null",
           p.comments || "Null",
+          p.createdAt,
+          p.updatedAt
         ]
       });
       setPosts(res);
